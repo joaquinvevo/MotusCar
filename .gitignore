@@ -1,0 +1,59 @@
+# ---- Python / Django ----
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.log
+*.pot
+*.py[cod]
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.Python
+env/
+venv/
+ENV/
+backend/venv/
+db.sqlite3
+media/
+staticfiles/
+
+# Django specific
+*.mo
+*.pot
+*.py,cover
+coverage.*
+*.cover
+*.log
+local_settings.py
+
+# ---- Node / Vue / Vite ----
+node_modules/
+dist/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+frontend/.env.local
+frontend/.env.*.local
+
+# ---- General ----
+*.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ---- Environment / Secrets ----
+.env
+.env.*
+!*.example
+
+# ---- TODO LIST ----
+
+TODO.md

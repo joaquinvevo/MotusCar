@@ -1,0 +1,179 @@
+{% load humanize static %}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Boleta #{{ order.id|default:"-" }} — Motuscar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Tema: usa la misma clave que checkout (motus_theme) -->
+  <script>
+  (function () {
+    var KEY = 'motus_theme';
+    var saved = (localStorage.getItem(KEY) || 'system').toLowerCase();
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var finalMode = (saved === 'system') ? (prefersDark ? 'dark' : 'light') : saved;
+    document.documentElement.setAttribute('data-theme', finalMode);
+
+    // sincroniza si el usuario cambia el tema en otra pestaña
+    window.addEventListener('storage', function (e) {
+      if (e.key === KEY) {
+        var v = (e.newValue || 'system').toLowerCase();
+        var pref = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', v === 'system' ? (pref ? 'dark' : 'light') : v);
+      }
+    });
+  })();
+  </script>
+
+  <style>
+    /* ===== Tokens (coherentes con la tienda) ===== */
+    :root{
+      --bg:#0b1220; --panel:#111827; --surface:#0f172a;
+      --text:#e5e7eb; --muted:#94a3b8;
+      --accent:#f97316; --accent-ink:#111;  /* texto SIEMPRE negro en primario */
+      --ok:#22c55e; --rule:rgba(148,163,184,.25);
+      --radius:14px; --shadow:0 10px 28px rgba(0,0,0,.28);
+    }
+    :root[data-theme="light"]{
+      --bg:#f8fafc; --panel:#ffffff; --surface:#ffffff;
+      --text:#0f172a; --muted:#6b7280;
+      --accent:#f97316; --accent-ink:#111;
+      --rule:#e5e7eb; --shadow:0 10px 28px rgba(30,41,59,.08);
+    }
+
+    /* ===== Layout ===== */
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+    .shell{min-height:100dvh;display:grid;place-items:center;padding:28px}
+    .wrap{width:100%;max-width:520px}
+
+    .success{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;margin-bottom:14px}
+    .badge{width:86px;height:86px;border-radius:999px;background:var(--ok);display:grid;place-items:center;box-shadow:0 12px 30px rgba(34,197,94,.22)}
+    .badge svg{width:46px;height:46px;color:#fff}
+    h1{margin:0;font-size:30px;letter-spacing:.2px}
+
+    .card{background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 18px 14px;display:flex;flex-direction:column;gap:12px}
+
+    /* Logo + fallback texto */
+    .logo-dark,.logo-light{height:34px;display:block;margin:0 auto 4px;object-fit:contain}
+    .logo-light{display:none}
+    :root[data-theme="light"] .logo-dark{display:none}
+    :root[data-theme="light"] .logo-light{display:block}
+    .brand{display:none;text-align:center;font-weight:900;letter-spacing:2px;text-transform:uppercase;font-size:22px}
+
+    .sub{color:var(--muted);text-align:center;margin-top:-2px}
+    .rule{height:1px;background:var(--rule);margin:12px 0}
+
+    .row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .left{color:var(--muted)}
+    .right{font-weight:700}
+
+    .item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:6px 0}
+    .qty{color:var(--muted)}
+    .desc{font-weight:600}
+    .price{font-weight:800}
+
+    .total-label{font-weight:900;letter-spacing:.3px}
+    .total{font-weight:900;font-size:20px}
+
+    .actions{display:flex;gap:16px;margin-top:14px}
+    .btn,
+    .btn-primary{height:48px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;flex:1;font-weight:800;text-decoration:none;transition:transform .06s ease, filter .15s ease}
+
+    /* Primario: naranja Motuscar con texto negro fijo */
+    .btn-primary{background:var(--accent); color:var(--accent-ink) !important; border:1px solid var(--accent); box-shadow:0 10px 18px rgba(249,115,22,.22)}
+    .btn-primary:hover{filter:brightness(1.05)}
+    .btn-primary:active{transform:translateY(1px)}
+
+    /* Secundario: neutro (sin naranjo). Blanco en light, oscuro en dark */
+    .btn{background:transparent; color:var(--text) !important; border:1px solid var(--rule)}
+    .btn:hover{filter:brightness(1.05)}
+    :root[data-theme="light"] .btn{background:#ffffff; color:#111 !important; border:1px solid #d1d5db}
+
+    .note{margin:12px auto 4px;text-align:center;color:var(--muted);font-size:12px;max-width:50ch}
+
+    @media print{
+      .actions,.note{display:none}
+      .shell{padding:0}
+      .wrap{max-width:720px}
+      .card{box-shadow:none;border:1px solid var(--rule)}
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="wrap">
+
+      <!-- Encabezado de éxito -->
+      <div class="success">
+        <div class="badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M20 7L9 18l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h1>¡Gracias por tu compra!</h1>
+      </div>
+
+      <!-- Boleta -->
+      <section class="card">
+        <!-- Logo (swap por tema). Si falla, muestra texto -->
+        <img class="logo-dark"
+             src="{% static 'ventas/img/Motuscar_logo.webp' %}" alt="Motuscar"
+             onerror="this.style.display='none';document.getElementById('brandFallback').style.display='block'">
+        <img class="logo-light"
+             src="{% static 'ventas/img/Motuscar-logo-negro.webp' %}" alt="Motuscar"
+             onerror="this.style.display='none';document.getElementById('brandFallback').style.display='block'">
+        <div id="brandFallback" class="brand">MOTUSCAR</div>
+
+        <div class="sub">Boleta N° {{ order.id|default:"—" }}</div>
+        <div class="rule"></div>
+
+        <div class="row">
+          <div class="left">Cliente:</div>
+          <div class="right">{{ buyer.name|default:buyer.email|default:"Cliente invitado" }}</div>
+        </div>
+        <div class="row">
+          <div class="left">Fecha:</div>
+          <div class="right">{{ order.date|date:"d/m/Y - H:i" }}</div>
+        </div>
+
+        <div class="rule"></div>
+
+        {% for it in items %}
+          <div class="item">
+            <div class="qty">{{ it.qty }}×</div>
+            <div class="desc">{{ it.name }}</div>
+            <div class="price">$ {{ it.subtotal|floatformat:0|intcomma }}</div>
+          </div>
+        {% empty %}
+          <div class="item"><div class="qty">—</div><div class="desc">Sin ítems</div><div class="price">—</div></div>
+        {% endfor %}
+
+        <div class="rule"></div>
+
+        <div class="row">
+          <div class="total-label">TOTAL PAGADO</div>
+          <div class="total">$ {{ total|floatformat:0|intcomma }}</div>
+        </div>
+
+        <div class="actions">
+          <button class="btn-primary" onclick="window.print()">Descargar boleta</button>
+          <a class="btn" href="{% url 'ventas:home' %}">Volver a la tienda</a>
+        </div>
+        {% if not request.user.is_authenticated %}
+        <p class="note" style="margin-top:10px;text-align:center">
+          ¿Quieres crear una cuenta para guardar tus compras?
+          <a href="{% url 'login:login' %}?next={% url 'ventas:home' %}" style="font-weight:700">
+            Crear una cuenta / Iniciar sesión
+          </a>
+        </p>
+      {% endif %}
+
+
+        <p class="note">Compra simulada para fines de demostración. Este documento no es un comprobante tributario.</p>
+      </section>
+
+    </div>
+  </div>
+</body>
+</html>

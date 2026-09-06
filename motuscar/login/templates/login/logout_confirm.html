@@ -1,0 +1,13 @@
+{% extends 'login/base_min.html' %}
+{% block title %}Cerrar sesión | Motuscar{% endblock %}
+
+{% block content %}
+<div class="auth-card animate-fade">
+  <h1>¿Seguro que deseas cerrar sesión?</h1>
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn">Sí, cerrar sesión</button>
+    <a href="{% url 'login:profile' %}" class="btn" style="background-color: var(--color-dark-blue);">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,284 @@
+{% extends 'login/base.html' %}
+{% load static %}
+
+{% block title %}Perfil de Usuario | Motuscar{% endblock %}
+
+{% block content %}
+
+<main class="profile-wrapper">
+
+  <section class="profile-container">
+
+    <!-- HEADER -->
+    <div class="profile-header">
+
+      <!-- Avatar -->
+      {% if user.foto %}
+      <img src="{{ user.foto.url }}" class="avatar-img" alt="Avatar">
+      {% else %}
+      <div class="avatar-circle">
+        {{ user.first_name|default:user.username|first|upper }}
+      </div>
+      {% endif %}
+
+      <h1 class="profile-name">{{ user.first_name|default:user.username }}</h1>
+      <span class="profile-username">@{{ user.username }}</span>
+
+      <!-- Badge tipo de usuario -->
+      <span class="user-badge user-badge-{{ user.tipo|default:'default' }}">
+        {{ user.tipo|default:"Usuario" }}
+      </span>
+    </div>
+
+    <!-- INF GENERAL -->
+    <div class="profile-section">
+      <h2 class="section-title"><i class="fa-solid fa-circle-info"></i> Información General</h2>
+
+      <ul class="info-list">
+        <li><i class="fa-solid fa-envelope"></i> {{ user.email }}</li>
+
+        {% if user.last_name %}
+        <li><i class="fa-solid fa-id-card"></i> RUT: {{ user.last_name }}</li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <!-- INFO POR TIPO DE USUARIO -->
+    {% if user.tipo == "cliente" %}
+    <div class="profile-section">
+      <h2 class="section-title"><i class="fa-solid fa-user"></i> Datos del Cliente</h2>
+      <ul class="info-list">
+        <li><i class="fa-solid fa-phone"></i> {{ user.telefono|default:"No registrado" }}</li>
+        <li><i class="fa-solid fa-location-dot"></i> {{ user.direccion|default:"No registrada" }}</li>
+      </ul>
+    </div>
+
+    {% elif user.tipo == "mecanico" %}
+    <div class="profile-section">
+      <h2 class="section-title"><i class="fa-solid fa-wrench"></i> Datos del Mecánico</h2>
+      <ul class="info-list">
+        <li><i class="fa-solid fa-screwdriver-wrench"></i> Especialidad: {{ user.especialidad|default:"No registrado" }}</li>
+      </ul>
+    </div>
+
+    {% elif user.tipo == "proveedor" %}
+    <div class="profile-section">
+      <h2 class="section-title"><i class="fa-solid fa-building"></i> Datos del Proveedor</h2>
+      <ul class="info-list">
+        <li><i class="fa-solid fa-phone"></i> {{ user.telefono|default:"No registrado" }}</li>
+        <li><i class="fa-solid fa-location-dot"></i> {{ user.direccion|default:"No registrada" }}</li>
+        <li><i class="fa-solid fa-tag"></i> Categoría: {{ user.categoria|default:"Sin categoría" }}</li>
+        <li><i class="fa-solid fa-globe"></i> 
+          <a href="{{ user.sitio_web }}" target="_blank" class="web-link">{{ user.sitio_web }}</a>
+        </li>
+      </ul>
+    </div>
+    {% endif %}
+
+    <!-- ACCIONES -->
+    <div class="profile-actions">
+      <a href="{% url 'login:editar_perfil' %}" class="btn btn-edit">
+          <i class="fa-solid fa-user-gear"></i> Editar perfil
+      </a>
+
+      <form method="post" action="{% url 'login:logout' %}">
+        {% csrf_token %}
+        <button class="btn btn-logout" type="submit">
+          <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+        </button>
+      </form>
+    </div>
+
+  </section>
+
+</main>
+
+<style>
+
+/* ================================
+   VARIABLES
+==================================*/
+:root[data-theme="light"] {
+  --bg: #eef1f5;
+  --card-bg: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #dfe3e7;
+  --shadow: rgba(0,0,0,0.08);
+}
+
+:root[data-theme="dark"] {
+  --bg: #0b1220;
+  --card-bg: #111827;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --border: #334155;
+  --shadow: rgba(0,0,0,0.3);
+}
+
+/* ================================
+   WRAPPER CENTRADO
+==================================*/
+.profile-wrapper {
+  min-height: 90vh;
+  padding: 3rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* CENTRADO VERTICAL REAL */
+}
+
+/* ================================
+   CONTENEDOR PRINCIPAL
+==================================*/
+.profile-container {
+  width: 100%;
+  max-width: 550px;
+  background: var(--card-bg);
+  padding: 2.8rem;
+  border-radius: 22px;
+  border: 1px solid var(--border);
+  box-shadow: 0 15px 35px var(--shadow);
+  animation: fadeIn 0.35s ease;
+}
+
+/* ================================
+   HEADER DEL PERFIL
+==================================*/
+.profile-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.avatar-circle, .avatar-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-circle {
+  background: #f97316;
+  color: #111;
+  font-size: 2.8rem;
+  font-weight: 800;
+}
+
+.avatar-img {
+  object-fit: cover;
+}
+
+.profile-name {
+  margin-top: 1rem;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.profile-username {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+/* BADGES */
+.user-badge {
+  margin-top: .7rem;
+  padding: 6px 14px;
+  display: inline-block;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.user-badge-cliente { background: #dbeafe; color: #1e3a8a; }
+.user-badge-mecanico { background: #dcfce7; color: #166534; }
+.user-badge-proveedor { background: #fee2e2; color: #b91c1c; }
+
+/* ================================
+   SECCIONES
+==================================*/
+.profile-section {
+  margin-top: 2rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.info-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.info-list li {
+  padding: .5rem 0;
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  color: var(--text);
+}
+
+.web-link {
+  color: #0ea5e9;
+  text-decoration: none;
+}
+.web-link:hover {
+  text-decoration: underline;
+}
+
+/* ================================
+   BOTONES
+==================================*/
+.profile-actions {
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.btn-edit {
+  background: #f97316;
+  color: #111;
+}
+.btn-edit:hover {
+  background: #ea580c;
+}
+
+.btn-logout {
+  background: #334155;
+  color: #fff;
+}
+.btn-logout:hover {
+  background: #475569;
+}
+
+/* ================================
+   ANIMACIONES
+==================================*/
+@keyframes fadeIn {
+  from { opacity:0; transform: translateY(10px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Mecánico — Motuscar</title>
+  <link rel="stylesheet" href="{% static 'login/css/register.css' %}">
+  <link rel="icon" href="{% static 'login/imgs/motusicon64x64.webp' %}">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header>
+    <a href="/"><img src="{% static 'login/imgs/Motuscar_logo.webp' %}" alt="Motuscar" class="logo"></a>
+    <a href="{% url 'login:login' %}" class="nav-link">Iniciar sesión</a>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main>
+    <div class="register-card">
+      <img src="{% static 'login/imgs/icon_mecanico.png' %}" alt="Mecánico" class="register-icon">
+      <h1>Registro de Mecánico</h1>
+      <p class="subtitle">Ofrece tus servicios y gestiona tus clientes fácilmente.</p>
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="nombre">Nombre completo</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre completo" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password1">Contraseña</label>
+          <input type="password" id="password1" name="password1" placeholder="Crea una contraseña" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password2">Confirmar contraseña</label>
+          <input type="password" id="password2" name="password2" placeholder="Repite tu contraseña" required>
+        </div>
+
+        <div class="form-group">
+          <label for="telefono">Teléfono</label>
+          <input type="text" id="telefono" name="telefono" placeholder="Ej: +56 9 8765 4321">
+        </div>
+
+        <div class="form-group">
+          <label for="taller">Nombre del taller</label>
+          <input type="text" id="taller" name="taller" placeholder="Ej: Taller Los Pistoneros">
+        </div>
+
+        <div class="form-group">
+          <label for="direccion_taller">Dirección del taller</label>
+          <input type="text" id="direccion_taller" name="direccion_taller" placeholder="Ej: Av. Las Industrias 456, Talcahuano">
+        </div>
+
+        <div class="form-group">
+          <label for="especialidad">Especialidad</label>
+          <select id="especialidad" name="especialidad" required>
+            <option value="">Selecciona tu especialidad</option>
+            <option value="motores">Motores</option>
+            <option value="frenos">Frenos</option>
+            <option value="suspension">Suspensión</option>
+            <option value="electricidad">Electricidad</option>
+            <option value="transmision">Transmisión</option>
+            <option value="otros">Otros</option>
+          </select>
+        </div>
+
+        <button type="submit">Registrarme</button>
+      </form>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2025 Motuscar — Todos los derechos reservados
+  </footer>
+</body>
+</html>

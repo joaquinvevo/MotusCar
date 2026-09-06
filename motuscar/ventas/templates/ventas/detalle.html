@@ -1,0 +1,552 @@
+{% load static humanize %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ p.nombre_producto }} | Motuscar</title>
+
+  <link rel="stylesheet" href="{% static 'ventas/css/styles.css' %}">
+  <script src="{% static 'ventas/js/scripts.js' %}" defer></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* --- Estilos Generales --- */
+    .detalle-wrap{max-width:1200px;margin:2rem auto;padding:0 16px}
+    .breadcrumbs{font-size:14px;color:#9ca3af;margin-bottom:12px}
+    .breadcrumbs a{color:#9ca3af;text-decoration:none}
+    .detalle-grid{display:grid;grid-template-columns:1fr 420px;gap:28px}
+    .galeria{background:#0b1220;border:1px solid #2a3345;border-radius:14px;padding:14px}
+    .galeria .main{width:100%;height:420px;object-fit:cover;border-radius:10px}
+    .thumbs{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+    .thumbs img{width:80px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent}
+    .thumbs img.active{border-color:#f97316}
+    .panel{background:#0b1220;border:1px solid #2a3345;border-radius:14px;padding:16px}
+    .badge-stock{display:inline-block;padding:5px 10px;border-radius:999px;background:#f97316;color:#111;border:1px solid #f97316;font-weight:800;font-size:12px}
+    .precio{font-size:28px;color:#f97316;font-weight:800;margin:.4rem 0 1rem}
+    .sku{color:#94a3b8}
+    .qty{display:inline-flex;align-items:center;border:1px solid #374151;border-radius:10px;overflow:hidden}
+    .qty button{background:#111827;color:#e5e7eb;border:none;width:36px;height:36px;font-weight:800;cursor:pointer}
+    .qty input{width:56px;height:36px;text-align:center;background:#0b1220;color:#e5e7eb;border:none}
+    .btn-primary{background:#f97316;color:#111;border:1px solid #f97316;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer}
+    .sec{margin-top:22px}
+    .specs{display:grid;grid-template-columns:160px 1fr;gap:6px;color:#cbd5e1}
+    
+    /* Reviews y Relacionados */
+    .reviews-section { margin-top: 30px; }
+    .reviews-list { margin-top: 15px; }
+    .rel{margin-top:34px}
+    .rel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+    .rel-card{background:#0b1220;border:1px solid #2a3345;border-radius:12px;padding:12px}
+    .rel-card img{width:100%;height:130px;object-fit:cover;border-radius:8px}
+    .rel-card .price{color:#f97316;font-weight:800}
+
+    /* --- HEADER ESTILOS --- */
+    .pcf-header{background:#212526;color:#fff;border-bottom:2px solid #e0682c}
+    .pcf-wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto auto 1fr auto;gap:14px;align-items:center;padding:10px 16px}
+    .pcf-logo img{height:38px;display:block; margin-left: -150px; }
+    .pcf-burger{display:flex;align-items:center;gap:10px;background:transparent;border:none;color:#fff;font-weight:700;cursor:pointer}
+    .pcf-search{display:flex;align-items:center;max-width:700px;width:100%;margin:0 6px;background:#fff;border-radius:4px;overflow:hidden}
+    .pcf-search input{flex:1;border:none;padding:12px 14px;font-size:15px;outline:none}
+    .pcf-search button{background:transparent;border:none;padding:0 12px;cursor:pointer;color:#555;font-size:18px}
+    .pcf-right{display:flex;align-items:center;gap:18px}
+    .pcf-link{color:#fff;text-decoration:none;font-weight:700; position: absolute; left: 1140px;}
+    .pcf-cart{position:relative;color:#fff;text-decoration:none;font-size:20px}
+    .pcf-badge{position:absolute;top:-8px;right:-10px;background:#f97316; color:#111;;border-radius:999px;padding:2px 7px;font-size:12px;font-weight:800;min-width:18px;text-align:center}
+    .pcf-drawer{background:#1a1d1e;border-top:1px solid #2d3234}
+    .pcf-drawer ul{list-style:none;margin:0;padding:8px 16px;display:flex;flex-wrap:wrap;gap:12px}
+    .pcf-drawer a{color:#e5e7eb;text-decoration:none;background:#2a2f31;padding:6px 10px;border-radius:6px}
+    .pcf-config {position: absolute; right: 100px; }
+    
+    /* --- Estilos NUEVOS Menú Usuario --- */
+    .user-menu-btn {
+        background: transparent; border: 1px solid #4b5563; color: #e5e7eb;
+        padding: 6px 12px; border-radius: 6px; cursor: pointer;
+        display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600;
+        transition: background 0.2s;
+    }
+    .user-menu-btn:hover { background: #374151; }
+    .user-dropdown {
+        position: absolute; top: 110%; right: 0;
+        background: #1f2937; border: 1px solid #374151; border-radius: 8px;
+        box-shadow: 0 10px 15px rgba(0,0,0,0.5); min-width: 160px; z-index: 50;
+        overflow: hidden;
+    }
+    .user-dropdown a, .user-dropdown button {
+        display: block; width: 100%; text-align: left;
+        padding: 10px 16px; color: #e5e7eb; text-decoration: none;
+        background: none; border: none; cursor: pointer; font-size: 14px;
+        border-bottom: 1px solid #374151;
+    }
+    .user-dropdown a:hover, .user-dropdown button:hover { background: #374151; color: #fff; }
+    .user-dropdown button { color: #f87171; border-bottom: none; }
+
+    /* Links y Hover */
+    .card h3 a{ color:#e5e7eb; text-decoration:none; }
+    .card h3 a:hover{ color:#f97316; text-decoration:underline; } 
+
+    /* Disponibilidad y Modales */
+    .avail{margin-top:.6rem}
+    .avail-item{border:1px solid #2a3345;border-radius:10px;margin:.5rem 0;background:#0b1220}
+    .avail-item summary{display:flex;gap:8px;align-items:center;cursor:pointer;padding:10px 12px;font-weight:700;list-style:none}
+    .avail-item summary::-webkit-details-marker{display:none}
+    .avail-reg{flex:1; color:#94a3b8;}
+    .prov{flex:1; color:#94a3b8;}
+    .avail-chip{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;background:#111827;border:1px solid #334155;color:#e5e7eb}
+    .avail-list{list-style:none;margin:0;padding:8px 12px 12px}
+    .avail-list li{display:grid; grid-template-columns: 1fr auto auto auto; gap:.75rem; align-items:center;border-top:1px dashed #2a3345;padding:8px 0}
+    .avail-list .right{margin-left:auto;font-weight:800;color:#f97316}
+    .btn-mini{display:inline-flex; align-items:center; gap:.5rem;background:#f97316; color:#111; border:1px solid #f97316;border-radius:12px; padding:8px 12px; font-weight:800; font-size:14px;cursor:pointer; box-shadow:0 6px 18px rgba(249,115,22,.22);}
+
+    /* Modal Styles */
+    .mc-modal {position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s ease;}
+    .mc-modal[aria-hidden="false"] { opacity: 1; visibility: visible; }
+    .mc-backdrop { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); }
+    .mc-dialog {background: #111827; border: 1px solid #374151; border-radius: 12px; padding: 24px; max-width: 480px; width: 90%; position: relative; z-index: 1;}
+    .mc-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: #e5e7eb; font-size: 24px; cursor: pointer; }
+    .mc-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .mc-check { background: #10b981; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .mc-body { display: flex; gap: 16px; align-items: center; margin-bottom: 24px; }
+    .mc-body img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; }
+    .mc-info { flex: 1; }
+    .mc-total { color: #f97316; font-weight: 700; font-size: 18px; text-align: right; }
+    .mc-actions { display: flex; gap: 12px; }
+    .btn { padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; border: none; cursor: pointer; flex: 1; text-align: center; }
+    .btn-soft-orange { background: #fed7aa; color: #7c2d12; }
+    .btn-dark { background: #374151; color: #e5e7eb; }
+  </style>
+</head>
+
+<div id="cartModal" class="mc-modal" aria-hidden="true">
+  <div class="mc-backdrop"></div>
+  <div class="mc-dialog" role="dialog" aria-modal="true" aria-labelledby="mcTitle">
+    <button class="mc-close" id="mcClose" aria-label="Cerrar">×</button>
+    <div class="mc-head"><span class="mc-check">✓</span><h3 id="mcTitle">Producto agregado al carro</h3></div>
+    <div class="mc-body">
+      <img id="mcImg" src="" alt="" />
+      <div class="mc-info"><a id="mcName" class="mc-name" href="#"></a><div class="mc-sku" id="mcSku"></div></div>
+      <div class="mc-price"><div class="mc-total" id="mcTotal"></div></div>
+    </div>
+    <div class="mc-actions">
+      <a id="mcContinue" href="{% url 'ventas:home' %}" class="btn btn-soft-orange">Seguir comprando</a>
+      <a id="mcGoCart" href="{% url 'ventas:carrito' %}" class="btn btn-dark">Ir al carrito</a>
+    </div>
+  </div>
+</div>
+
+<body>
+  <header class="pcf-header">
+    <div class="pcf-wrap">
+      <a class="pcf-logo" href="{% url 'ventas:carrito' %}">
+        <img src="{% static 'assets/img/Motuscar-logo.webp' %}" alt="Motuscar">
+      </a>
+
+      <button class="pcf-burger" id="btnCats" aria-expanded="false" aria-controls="catsDrawer">
+        <i class="fa-solid fa-bars"></i><span>Categorías</span>
+      </button>
+
+      <form class="pcf-search" action="{% url 'ventas:home' %}" method="get">
+        <input type="text" name="q" id="search" placeholder="Busca aquí tu producto" value="{{ request.GET.q }}">
+        <button aria-label="Buscar"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+
+      <nav class="pcf-right">
+        {% if user.is_authenticated %}
+            <div style="position:relative; display:inline-block;" id="userMenuWrapper">
+                <button id="userMenuBtn" class="user-menu-btn">
+                    <i class="fa-solid fa-user"></i>
+                    <span>{{ user.username }}</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div id="userMenu" class="user-dropdown" hidden>
+                    <a href="{% url 'login:profile' %}"><i class="fa-solid fa-user-gear"></i> Mi Perfil</a>
+                    <a href="#"><i class="fa-solid fa-receipt"></i> Mis Compras</a>
+                    <form action="{% url 'login:logout' %}" method="post" style="margin:0;">
+                        {% csrf_token %}
+                        <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <a class="pcf-link" href="{% url 'login:login' %}" style="color:white; text-decoration:none; font-weight:bold;">
+              Iniciar Sesión <i class="fa-solid fa-caret-down"></i>
+            </a>
+        {% endif %}
+        
+        <a class="pcf-cart" href="{% url 'ventas:carrito' %}">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span id="cartBadge" class="pcf-badge">0</span>
+        </a>
+
+        <div class="pcf-config">
+          <button class="cfg-btn" id="cfgBtn"><i class="fa-solid fa-gear"></i></button>
+          <div class="config-menu" id="themeMenu" role="menu" hidden>
+            <button class="config-menu-item" data-theme="light"><i class="fa-solid fa-sun"></i> Modo claro</button>
+            <button class="config-menu-item" data-theme="dark"><i class="fa-solid fa-moon"></i> Modo oscuro</button>
+            <button class="config-menu-item" data-theme="system"><i class="fa-solid fa-display"></i> Seguir al sistema</button>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div id="catsDrawer" class="pcf-drawer" hidden>
+      <ul>
+        {% for c in categorias %}
+          <li><a href="{% url 'ventas:home' %}?categoria={{ c.id }}">{{ c.nombre }}</a></li>
+        {% endfor %}
+        <li><a href="{% url 'ventas:home' %}">Todas las categorías</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="detalle-wrap">
+    <nav class="breadcrumbs">
+      <a href="{% url 'ventas:home' %}">Inicio</a> ›
+      {% if p.categoria %}<a href="{% url 'ventas:home' %}?categoria={{ p.categoria.id }}">{{ p.categoria.nombre }}</a> ›{% endif %}
+      <span>{{ p.nombre_producto }}</span>
+    </nav>
+
+    <div class="detalle-grid">
+      <section class="galeria">
+        {% with seed=p.codigo_sku|default:p.id_producto kw=p.categoria.nombre|default:"car parts" %}
+          <img id="mainImg" class="main" src="{% static 'ventas/img/' %}{{ p.codigo_sku }}.jpg" alt="{{ p.nombre_producto }}">
+          <div class="thumbs" id="thumbs">
+            <img class="active" src="{% static 'ventas/img/' %}{{ p.codigo_sku }}.jpg" alt="">
+            <img src="{% static 'ventas/img/' %}{{ p.codigo_sku }}.jpg" alt="">
+            <img src="{% static 'ventas/img/' %}{{ p.codigo_sku }}.jpg" alt="">
+            <img src="{% static 'ventas/img/' %}{{ p.codigo_sku }}.jpg" alt="">
+          </div>
+        {% endwith %}
+      </section>
+
+      <aside class="panel">
+        {% if p.stock_actual > 0 %}
+          <span class="badge-stock">En stock</span>
+        {% else %}
+          <span class="badge-stock" style="background:#7f1d1d;color:#fff">Agotado</span>
+        {% endif %}
+
+        <h1 style="margin:.4rem 0;color: white">{{ p.nombre_producto }}</h1>
+        <div class="sku">SKU {{ p.codigo_sku }}{% if p.categoria %} — {{ p.categoria.nombre }}{% endif %}</div>
+        <div class="precio">$ {{ p.precio_unitario|intcomma }}</div>
+
+        <div style="display:flex;gap:10px;align-items:center;margin:8px 0 16px">
+          <div class="qty">
+            <button type="button" id="qminus">−</button>
+            <input id="qvalue" type="number" value="1" min="1" max="{{ p.stock_actual }}">
+            <button type="button" id="qplus">+</button>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="btnAddDetail"
+                data-id="{{ p.id_producto }}"
+                data-name="{{ p.nombre_producto }}"
+                data-price="{{ p.precio_unitario }}"
+                data-sku="{{ p.codigo_sku }}">
+          <i class="fa-solid fa-cart-plus"></i> Agregar al carrito
+        </button>
+
+        <div class="sec">
+          <h3 style="color: white;">Características</h3>
+          <div class="specs">
+            <div>Proveedor</div><div>{{ p.proveedor.nombre_comercial|default:"-" }}</div>
+            <div>Categoría</div><div>{{ p.categoria.nombre|default:"-" }}</div>
+            <div>Disponibles</div><div>{{ p.stock_actual }}</div>
+          </div>
+        </div>
+
+        {% if por_region %}
+        <div class="sec">
+          <h3>Disponibilidad por región</h3>
+          <div class="avail">
+            {% for reg, lst in por_region.items %}
+              <details class="avail-item">
+                <summary>
+                  <span class="avail-reg">{{ reg }}</span>
+                  <span class="avail-chip">{{ lst|length }} suc.</span>
+                  {% with first=lst|dictsort:"precio"|first %}
+                    <span class="avail-chip">desde $ {{ first.precio|intcomma }}</span>
+                  {% endwith %}
+                </summary>
+                <ul class="avail-list">
+                  {% for v in lst %}
+                  <li>
+                    <span class="prov">{{ v.proveedor }}</span>
+                    {% if v.comuna %}<span class="muted">— {{ v.comuna }}</span>{% endif %}
+                    <span class="right">$ {{ v.precio|intcomma }}</span>
+                    
+                    <button class="btn-mini add-variant"
+                      data-id="{{ v.id }}"
+                      data-sku="{{ v.sku }}"
+                      data-name="{{ p.nombre_producto }} ({{ v.proveedor|default:'Proveedor' }}, {{ v.comuna|default:'-' }})"
+                      data-price="{{ v.precio }}">
+                      <i class="fa-solid fa-cart-plus"></i> Agregar
+                    </button>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </details>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+      </aside>
+    </div>
+
+    <section class="panel reviews-section">
+      <h3>Opiniones de clientes</h3>
+
+      {% if mi_valoracion %}
+        <div style="background: #0b1220; padding:15px; border-radius:8px; margin-bottom:20px; border:1px solid #0b1220;">
+          <h4 style="color:#f97316; margin-top:0"><i class="fa-solid fa-check-circle"></i> ¡Gracias por tu opinión!</h4>
+          <p style="color:#d1fae5; margin-bottom:5px;">Ya has valorado este producto con <strong>{{ mi_valoracion.puntuacion }} estrellas</strong>.</p>
+          {% if mi_valoracion.comentario %}
+            <p style="font-style:italic; color:#a7f3d0;">"{{ mi_valoracion.comentario }}"</p>
+          {% endif %}
+          
+          <details style="margin-top:10px;">
+              <summary style="cursor:pointer; color:#f97316; font-size:14px;">Editar mi reseña</summary>
+              <form action="{% url 'ventas:guardar_valoracion' p.codigo_sku %}" method="POST" style="margin-top:10px;">
+                {% csrf_token %}
+                <div style="margin-bottom:10px;">
+                  <label style="color:#e5e7eb;">Nueva Calificación:</label>
+                  <select name="puntuacion" style="background:#374151; color:white; border:none; padding:5px; border-radius:4px;">
+                    <option value="5" {% if mi_valoracion.puntuacion == 5 %}selected{% endif %}>★★★★★ (Excelente)</option>
+                    <option value="4" {% if mi_valoracion.puntuacion == 4 %}selected{% endif %}>★★★★☆ (Bueno)</option>
+                    <option value="3" {% if mi_valoracion.puntuacion == 3 %}selected{% endif %}>★★★☆☆ (Regular)</option>
+                    <option value="2" {% if mi_valoracion.puntuacion == 2 %}selected{% endif %}>★★☆☆☆ (Malo)</option>
+                    <option value="1" {% if mi_valoracion.puntuacion == 1 %}selected{% endif %}>★☆☆☆☆ (Pésimo)</option>
+                  </select>
+                </div>
+                <textarea name="comentario" rows="3" style="width:100%; background:#374151; color:white; border:none; padding:10px; border-radius:4px;" required>{{ mi_valoracion.comentario }}</textarea>
+                <button type="submit" class="btn-primary" style="margin-top:10px; font-size:14px;">Actualizar Opinión</button>
+              </form>
+          </details>
+        </div>
+
+      {% elif ha_comprado %}
+        <div style="background:#1f2937; padding:15px; border-radius:8px; margin-bottom:20px; border:1px solid #10b981;">
+          <h4 style="color:#f97316; margin-top:0"><i class="fa-solid fa-check-circle"></i> ¡Compraste este producto!</h4>
+          <p style="font-size:14px; margin-bottom:10px; color:#e5e7eb;">Cuéntanos qué tal te funcionó:</p>
+          
+          <form action="{% url 'ventas:guardar_valoracion' p.codigo_sku %}" method="POST">
+            {% csrf_token %}
+            <div style="margin-bottom:10px;">
+              <label style="color:#e5e7eb;">Calificación:</label>
+              <select name="puntuacion" style="background:#374151; color:white; border:none; padding:5px; border-radius:4px;">
+                <option value="5">★★★★★ (Excelente)</option>
+                <option value="4">★★★★☆ (Bueno)</option>
+                <option value="3">★★★☆☆ (Regular)</option>
+                <option value="2">★★☆☆☆ (Malo)</option>
+                <option value="1">★☆☆☆☆ (Pésimo)</option>
+              </select>
+            </div>
+            <textarea name="comentario" rows="3" placeholder="Escribe tu opinión aquí..." style="width:100%; background:#374151; color:white; border:none; padding:10px; border-radius:4px;" required></textarea>
+            <button type="submit" class="btn-primary" style="margin-top:10px; font-size:14px;">Publicar Opinión</button>
+          </form>
+        </div>
+      {% endif %}
+
+      <div class="reviews-list">
+        {% for val in valoraciones %}
+          <div style="border-bottom:1px solid #374151; padding:10px 0;">
+            <div style="display:flex; justify-content:space-between;">
+              <strong style="color:#e5e7eb;">{{ val.usuario.username }}</strong>
+              <span style="color:#f97316">
+                {% if val.puntuacion == 5 %}★★★★★{% endif %}
+                {% if val.puntuacion == 4 %}★★★★☆{% endif %}
+                {% if val.puntuacion == 3 %}★★★☆☆{% endif %}
+                {% if val.puntuacion == 2 %}★★☆☆☆{% endif %}
+                {% if val.puntuacion == 1 %}★☆☆☆☆{% endif %}
+              </span>
+            </div>
+            <p style="color:#cbd5e1; margin:5px 0;">{{ val.comentario }}</p>
+            <small style="color:#64748b">{{ val.creado|date:"d M Y" }} - Compra verificada <i class="fa-solid fa-check"></i></small>
+          </div>
+        {% empty %}
+          <p style="color:#9ca3af">Aún no hay opiniones. ¡Sé el primero en opinar!</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    {% if relacionados %}
+    <section class="rel">
+      <h3>Otras personas también vieron</h3>
+      <div class="rel-grid">
+        {% for r in relacionados %}
+          <article class="rel-card">
+            <a href="{% url 'ventas:detalle' r.codigo_sku %}">
+              {% with seed=r.codigo_sku|default:r.id_producto kw=r.categoria.nombre|default:"car parts" %}
+                <img src="https://loremflickr.com/480/360/{{ kw|urlencode }}?lock={{ seed|urlencode }}" alt="{{ r.nombre_producto }}">
+              {% endwith %}
+              <div style="margin-top:6px;font-weight:700">{{ r.nombre_producto }}</div>
+            </a>
+            <div class="price">$ {{ r.precio_unitario|intcomma }}</div>
+            <button class="btn btn-primary add"
+                    data-id="{{ r.id_producto }}"
+                    data-name="{{ r.nombre_producto }}"
+                    data-price="{{ r.precio_unitario }}"
+                    data-sku="{{ p.codigo_sku }}">
+              <i class="fa-solid fa-cart-plus"></i> Agregar al carrito
+            </button>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+  </main>
+
+  <footer id="contacto">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <img src="{% static 'assets/img/Motuscar-logo.webp' %}" alt="">
+        <p class="footer-description">Lo mejor para tu Auto, lo mejor para tu Tiempo.</p>
+      </div>
+      <div class="footer-contact">
+        <h4 class="footer-subtitle">Contacto</h4>
+        <p class="footer-info"><i class="fas fa-envelope"></i> motusteam@yahoo.com</p>
+        <p class="footer-info"><i class="fa-brands fa-square-instagram"></i> <a href="https://www.instagram.com/motuscarusm/">Instagram</a></p>
+      </div>
+      <div class="footer-copyright">
+        <p class="copyright-text">© 2025 Motuscar. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 1. Galería
+    const mainImg = document.getElementById('mainImg');
+    document.getElementById('thumbs')?.addEventListener('click', (e)=>{
+      if(e.target.tagName === 'IMG'){
+        document.querySelectorAll('#thumbs img').forEach(i=>i.classList.remove('active'));
+        e.target.classList.add('active');
+        mainImg.src = e.target.src;
+      }
+    });
+
+    // 2. Cantidad +/- 
+    const minus = document.getElementById('qminus');
+    const plus  = document.getElementById('qplus');
+    const qval  = document.getElementById('qvalue');
+    minus?.addEventListener('click', ()=>{ qval.value = Math.max(1, (+qval.value||1)-1); });
+    plus?.addEventListener('click', ()=>{ qval.value = Math.max(1, (+qval.value||1)+1); });
+
+    // 3. Modales y Carrito
+    (function(){
+      const nf = new Intl.NumberFormat("es-CL");
+      const MOD = document.getElementById("cartModal");
+      const CLOSE = document.getElementById("mcClose");
+      const BACK  = MOD?.querySelector(".mc-backdrop");
+
+      function showCartModal({name, sku, total, img}){
+        if(!MOD) return;
+        document.getElementById("mcImg").src = img || "";
+        document.getElementById("mcName").textContent = name || "";
+        document.getElementById("mcSku").textContent  = sku ? "SKU " + sku : "";
+        document.getElementById("mcTotal").textContent= total!=null ? "$ " + nf.format(total) : "";
+        MOD.setAttribute("aria-hidden","false");
+        document.body.style.overflow="hidden";
+      }
+      function hideCartModal(){
+        if(!MOD) return;
+        MOD.setAttribute("aria-hidden","true");
+        document.body.style.overflow="";
+      }
+      CLOSE?.addEventListener("click", hideCartModal);
+      BACK?.addEventListener("click", hideCartModal);
+      document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") hideCartModal(); });
+
+      const KEY="motuscar_cart";
+      const get=()=>JSON.parse(localStorage.getItem(KEY)||"[]");
+      const save=c=>localStorage.setItem(KEY, JSON.stringify(c));
+      const refreshBadge=()=>{
+        const b=document.getElementById("cartBadge");
+        if(b) b.textContent=get().reduce((a,x)=>a+(x.qty||0),0);
+      };
+
+      document.getElementById('btnAddDetail')?.addEventListener('click', (ev)=>{
+        const btn = ev.currentTarget;
+        const id=Number(btn.dataset.id), name=btn.dataset.name, sku=btn.dataset.sku||"", price=Number(btn.dataset.price||0);
+        const qty=Math.max(1, Number(document.getElementById('qvalue').value)||1);
+        const img=document.getElementById('mainImg')?.src||"";
+        
+        const cart=get();
+        const i=cart.findIndex(x=>x.id===id);
+        if(i>=0){ cart[i].qty+=qty; if(!cart[i].img) cart[i].img=img; }
+        else{ cart.push({id,name,price,qty,img,sku}); }
+        save(cart); refreshBadge();
+        showCartModal({name, sku, total: price*qty, img});
+      });
+
+      document.addEventListener("click",(e)=>{
+        const btn = e.target.closest(".add-variant");
+        if(!btn) return;
+        e.preventDefault();
+        const item={id:Number(btn.dataset.id), sku:btn.dataset.sku||"", name:btn.dataset.name, price:Number(btn.dataset.price||0), img:document.getElementById('mainImg')?.src||""};
+        const cart=get();
+        const i=cart.findIndex(x=>x.id===item.id);
+        if(i>=0){ cart[i].qty+=1; } else { cart.push({...item, qty:1}); }
+        save(cart); refreshBadge();
+        showCartModal({name:item.name, sku:item.sku, total:item.price, img:item.img});
+      });
+
+      const btnCat = document.getElementById('btnCats');
+      const drawer = document.getElementById('catsDrawer');
+      if(btnCat && drawer){
+        btnCat.addEventListener('click', ()=>{
+          const open = !drawer.hasAttribute('hidden');
+          if(open){ drawer.setAttribute('hidden',''); btnCat.setAttribute('aria-expanded','false'); }
+          else { drawer.removeAttribute('hidden'); btnCat.setAttribute('aria-expanded','true'); }
+        });
+      }
+      refreshBadge();
+    })();
+
+    // 4. Configuración tema (y AHORA TAMBIÉN EL MENÚ DE USUARIO)
+    (function(){
+      // -- Menú Usuario --
+      const userBtn = document.getElementById("userMenuBtn");
+      const userMenu = document.getElementById("userMenu");
+      if(userBtn && userMenu){
+        userBtn.addEventListener("click", (e)=>{
+          e.stopPropagation();
+          const isHidden = userMenu.hasAttribute("hidden");
+          if(isHidden) userMenu.removeAttribute("hidden");
+          else userMenu.setAttribute("hidden","");
+        });
+        document.addEventListener("click", (e)=>{
+          if(!userMenu.contains(e.target) && !userBtn.contains(e.target)){
+            userMenu.setAttribute("hidden","");
+          }
+        });
+      }
+
+      // -- Tema --
+      const root = document.documentElement;
+      const KEY  = "motus_theme";
+      function applyTheme(mode){
+        root.setAttribute("data-theme", mode==="system"?(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):mode);
+        localStorage.setItem(KEY, mode);
+      }
+      applyTheme(localStorage.getItem(KEY) || "system");
+      
+      const cfgBtn = document.getElementById("cfgBtn");
+      const menu   = document.getElementById("themeMenu");
+      if(cfgBtn && menu){
+        cfgBtn.addEventListener("click", ()=>{
+          const open = !menu.hasAttribute("hidden");
+          if(open){ menu.setAttribute("hidden",""); } else { menu.removeAttribute("hidden"); }
+        });
+        document.addEventListener("click",(e)=>{
+          if(!menu.contains(e.target) && !cfgBtn.contains(e.target)){ menu.setAttribute("hidden",""); }
+        });
+        menu.querySelectorAll(".config-menu-item").forEach(btn=>{
+          btn.addEventListener("click", ()=>{ applyTheme(btn.dataset.theme); menu.setAttribute("hidden",""); });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

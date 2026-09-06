@@ -1,0 +1,54 @@
+# ----------------------------------------------------
+# Line endings: usa LF en todos los sistemas operativos
+# ----------------------------------------------------
+* text=auto eol=lf
+
+# ----------------------------------------------------
+# Python (Django / DRF)
+# ----------------------------------------------------
+*.py text diff=python
+*.pyw text diff=python
+
+# Migraciones de Django → son archivos Python normales
+*.py text
+
+# ----------------------------------------------------
+# Node / Vue / Vite
+# ----------------------------------------------------
+*.js   text
+*.jsx  text
+*.ts   text
+*.tsx  text
+*.vue  text
+*.css  text
+*.scss text
+*.html text
+*.json text
+*.md   text
+*.yml  text
+*.yaml text
+
+# ----------------------------------------------------
+# Archivos de configuración
+# ----------------------------------------------------
+*.sh text eol=lf
+Dockerfile text
+.gitignore text
+.gitattributes text
+
+# ----------------------------------------------------
+# Binarios (nunca convertir finales de línea)
+# ----------------------------------------------------
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.tgz binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary

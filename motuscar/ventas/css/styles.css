@@ -1,0 +1,37 @@
+*,*::after,*::before{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0b1220;--text:#e5e7eb;--accent:orangered}
+:root[data-theme="light"]{--bg:#f8fafc;--text:#0b1220}
+:root[data-theme="dark"]{--bg:#0b1220;--text:#0b1220}
+
+body{display:flex;flex-direction:column;min-height:100vh;background:var(--bg);color:var(--text);font-family:Montserrat,system-ui,Arial}
+
+footer{margin-top:auto;background:#1a1a1a;color:#fff;padding:2.5rem 0;border-top:1px solid rgba(255,255,255,.1)}
+.footer-container{display:flex;flex-wrap:wrap;justify-content:space-between;max-width:1200px;margin:0 auto;padding:0 20px;gap:2rem}
+.footer-brand,.footer-contact{flex:1;min-width:200px}
+.footer-brand img{margin-top:.5rem;width:12rem;height:1.7rem}
+.footer-subtitle{font-weight:600;margin-bottom:1rem;color:#e0e0e0;position:relative;display:inline-block}
+.footer-subtitle::after{content:'';position:absolute;left:0;bottom:-5px;width:40px;height:2px;background:orangered}
+.footer-description,.footer-info{color:#b0b0b0;line-height:1.5;margin:.5rem 0}
+.footer-info i{margin-right:8px;color:orangered;width:20px;text-align:center;font-size:1.5rem}
+.footer-info a{color:#b0b0b0;text-decoration:none}
+.footer-info:hover,.footer-info a:hover,.footer-description:hover{color:#fff;transition:color .3s}
+.footer-copyright{width:100%;text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.05)}
+.copyright-text{font-size:.9rem;color:#777}
+
+/* Header estilo PCFactory */
+.pcf-header{background:#212526;color:#fff;border-bottom:2px solid #e0682c}
+.pcf-wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto auto 1fr auto;gap:14px;align-items:center;padding:10px 16px}
+.pcf-logo img{height:38px;display:block}
+.pcf-burger{display:flex;align-items:center;gap:10px;background:transparent;border:none;color:#fff;font-weight:700;cursor:pointer}
+.pcf-burger i{font-size:20px}
+.pcf-search{display:flex;align-items:center;max-width:700px;width:100%;margin:0 6px;background:#fff;border-radius:4px;overflow:hidden}
+.pcf-search input{flex:1;border:none;padding:12px 14px;font-size:15px;outline:none}
+.pcf-search button{background:transparent;border:none;padding:0 12px;cursor:pointer;color:#555;font-size:18px}
+.pcf-right{display:flex;align-items:center;gap:18px}
+.pcf-link{color:#fff;text-decoration:none;font-weight:700}
+.pcf-cart{position:relative;color:#fff;text-decoration:none;font-size:20px}
+.pcf-badge{position:absolute;top:-8px;right:-10px;background:#57d37b;color:#0b0b0b;border-radius:999px;padding:2px 7px;font-size:12px;font-weight:800;min-width:18px;text-align:center}
+.pcf-drawer{background:#1a1d1e;border-top:1px solid #2d3234}
+.pcf-drawer ul{list-style:none;margin:0;padding:8px 16px;display:flex;flex-wrap:wrap;gap:12px}
+.pcf-drawer a{color:#e5e7eb;text-decoration:none;background:#2a2f31;padding:6px 10px;border-radius:6px}
+@media (max-width:960px){.pcf-wrap{gap:10px}.pcf-right{gap:12px}.pcf-search{max-width:none}}

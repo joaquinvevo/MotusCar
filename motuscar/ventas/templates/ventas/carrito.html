@@ -1,0 +1,461 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carrito de compras | Motuscar</title>
+
+  <link rel="stylesheet" href="{% static 'ventas/css/styles.css' %}">
+  <script src="{% static 'ventas/js/scripts.js' %}" defer></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+        .detalle-wrap{max-width:1200px;margin:2rem auto;padding:0 16px}
+    .breadcrumbs{font-size:14px;color:#9ca3af;margin-bottom:12px}
+    .breadcrumbs a{color:#9ca3af;text-decoration:none}
+    .detalle-grid{display:grid;grid-template-columns:1fr 420px;gap:28px}
+    .galeria{background:#0b1220;border:1px solid #2a3345;border-radius:14px;padding:14px}
+    .galeria .main{width:100%;height:420px;object-fit:cover;border-radius:10px}
+    .thumbs{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+    .thumbs img{width:80px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent}
+    .thumbs img.active{border-color:#f97316}
+    .panel{background:#0b1220;border:1px solid #2a3345;border-radius:14px;padding:16px}
+    .badge-stock{display:inline-block;padding:5px 10px;border-radius:999px;background:#16a34a;color:#0b0b0b;font-weight:800;font-size:12px}
+    .precio{font-size:28px;color:#f97316;font-weight:800;margin:.4rem 0 1rem}
+    .sku{color:#94a3b8}
+    .qty{display:inline-flex;align-items:center;border:1px solid #374151;border-radius:10px;overflow:hidden}
+    .qty button{background:#111827;color:#e5e7eb;border:none;width:36px;height:36px;font-weight:800;cursor:pointer}
+    .qty input{width:56px;height:36px;text-align:center;background:#0b1220;color:#e5e7eb;border:none}
+    .btn-primary{background:#f97316;color:#111;border:1px solid #f97316;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer}
+    .sec{margin-top:22px}
+    .specs{display:grid;grid-template-columns:160px 1fr;gap:6px;color:#cbd5e1}
+    .rel{margin-top:34px}
+    .rel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+    .rel-card{background:#0b1220;border:1px solid #2a3345;border-radius:12px;padding:12px}
+    .rel-card img{width:100%;height:130px;object-fit:cover;border-radius:8px}
+    .rel-card .price{color:#f97316;font-weight:800}
+        .ventas-main{margin:2rem auto;max-width:1200px;padding:0 16px}
+    .ventas-grid{display:grid;grid-template-columns:320px 1fr;gap:24px}
+    .filtros{position:sticky; top:88px; background:#111827; border:1px solid #374151; border-radius:12px; padding:16px; color:#e5e7eb}
+    .filtros h2{margin:0 0 .6rem}
+    .filtros label{display:block;margin:.8rem 0 .25rem}
+    .filtros input,.filtros select{width:100%;padding:8px;border-radius:8px;border:1px solid #374151;background:#0b1220;color:#e5e7eb}
+    .btn-apply{margin-top:.8rem;width:100%;padding:10px;border-radius:8px;border:1px solid #f97316;background:#f97316;color:#111;cursor:pointer}
+    .barra{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px}
+    .barra .left{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    .ordenar{padding:8px;border-radius:8px;border:1px solid #374151;background:#0b1220;color:#e5e7eb}
+    .pill{display:inline-block;padding:6px 10px;border:1px solid #d1d5db;border-radius:999px;font-size:12px;color:#e5e7eb;background:#0b1220}
+    .productos{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:18px}
+    @media (min-width: 1200px){ .productos{ grid-template-columns:repeat(3, 1fr);} }
+    @media (min-width: 1500px){ .productos{ grid-template-columns:repeat(4, 1fr);} }
+    .card{background:#111827;border:1px solid #2a3345;border-radius:14px;padding:16px;color:#e5e7eb; box-shadow:0 6px 16px rgba(0,0,0,.18)}
+    .card h3{margin:.25rem 0 0 0}
+    .card .sub{font-size:13px;color:#9ca3af}
+    .card .price{color:#f97316;font-weight:800;margin:.6rem 0;font-size:18px}
+    .card .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;margin-bottom:8px;background:#065f46}
+    .card .badge.oos{background:#7f1d1d}
+    .card img{display:block;width:100%;height:160px;object-fit:cover;border-radius:10px;margin-bottom:8px}
+    .paginacion{display:flex;gap:.5rem;justify-content:center;margin-top:16px}
+    .paginacion a,.paginacion span{padding:.5rem .8rem;border-radius:8px;border:1px solid #374151;color:#e5e7eb;text-decoration:none}
+    .actual{background:#f97316;border-color:#f97316;color:#111}
+    .pcf-header{background:#212526;color:#fff;border-bottom:2px solid #e0682c}
+    .pcf-wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto auto 1fr auto;gap:14px;align-items:center;padding:10px 16px}
+    .pcf-logo img{height:38px;display:block; margin-left: -150px; }
+    .pcf-burger{display:flex;align-items:center;gap:10px;background:transparent;border:none;color:#fff;font-weight:700;cursor:pointer}
+    .pcf-burger i{font-size:20px}
+    .pcf-search{display:flex;align-items:center;max-width:700px;width:100%;margin:0 6px;background:#fff;border-radius:4px;overflow:hidden}
+    .pcf-search input{flex:1;border:none;padding:12px 14px;font-size:15px;outline:none}
+    .pcf-search button{background:transparent;border:none;padding:0 12px;cursor:pointer;color:#555;font-size:18px}
+    .pcf-right{display:flex;align-items:center;gap:18px}
+    .pcf-link{color:#fff;text-decoration:none;font-weight:700; position: absolute; left: 1140px;}
+    .pcf-cart{position:relative;color:#fff;text-decoration:none;font-size:20px}
+    .pcf-badge{position:absolute;top:-8px;right:-10px;background:#f97316; color:#111;;border-radius:999px;padding:2px 7px;font-size:12px;font-weight:800;min-width:18px;text-align:center}
+    .pcf-drawer{background:#1a1d1e;border-top:1px solid #2d3234}
+    .pcf-drawer ul{list-style:none;margin:0;padding:8px 16px;display:flex;flex-wrap:wrap;gap:12px}
+    .pcf-drawer a{color:#e5e7eb;text-decoration:none;background:#2a2f31;padding:6px 10px;border-radius:6px}
+    .badge-stock{
+      display:inline-block; padding:5px 10px; border-radius:999px;
+      background:#f97316; color:#0b0b0b; font-weight:800; font-size:12px; position:relative; top:-3px;
+    }
+    
+    .pcf-config {position: absolute; right: 100px; }
+    .range-wrap{position:relative;height:36px;margin:.4rem 0 6px}
+    .range-wrap input[type=range]{position:absolute;left:0;right:0;top:8px;width:100%;pointer-events:none;background:transparent;-webkit-appearance:none}
+    .range-wrap input[type=range]::-webkit-slider-thumb{
+      pointer-events:auto;-webkit-appearance:none; width:18px;height:18px;border-radius:50%;
+      background:#f97316;border:2px solid #fff; box-shadow:0 0 0 2px #f97316;
+    }
+    .range-wrap input[type=range]::-webkit-slider-runnable-track{height:6px;background:transparent}
+    .range-track{
+      position:absolute;left:0;right:0;top:16px;height:6px;border-radius:999px;
+      background:#2a3345;
+    }
+    .range-labels{display:flex;justify-content:space-between;font-weight:700}
+    
+    .card h3 a{
+      color:#e5e7eb;
+      text-decoration:none;
+    }
+    .card h3 a:visited{ color:#e5e7eb; }
+    .card h3 a:hover{ color:#f97316; text-decoration:underline; } 
+    .card h3 a:focus-visible{ outline:2px solid #f97316; outline-offset:2px; }
+    .wrap{max-width:1200px;margin:2rem auto;padding:0 16px}
+    .carrito-grid{display:grid;grid-template-columns:1fr 360px;gap:22px}
+    .panel{background:#0b1220;border:1px solid #2a3345;border-radius:14px;padding:16px;color:#e5e7eb}
+    .empty{padding:28px;text-align:center;color:#9ca3af}
+    .btn{border-radius:12px;padding:10px 14px;border:1px solid #374151;background:#111827;color:#e5e7eb;cursor:pointer}
+    .btn-primary{background:#f97316;border-color:#f97316;color:#111;font-weight:800}
+    .btn-danger{background:#7f1d1d;border-color:#7f1d1d}
+    .btn-soft{background:#1f2937;border-color:#374151}
+    .top-actions{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap}
+
+    /* Tabla */
+    table.cart{width:100%;border-collapse:separate;border-spacing:0 10px}
+    table.cart th{font-weight:700;text-align:left;color:#9ca3af;padding:0 10px 6px}
+    table.cart td{vertical-align:middle;background:#0b1220;padding:10px;border-top:1px solid #2a3345;border-bottom:1px solid #2a3345}
+    .row{border-radius:12px;overflow:hidden}
+    .col-prod{display:flex;gap:12px;align-items:center}
+    .thumb{width:72px;height:64px;object-fit:cover;border-radius:8px;border:1px solid #2a3345;background:#0b1220}
+    .name{font-weight:700}
+    .sku{font-size:12px;color:#9ca3af}
+    .price,.subt{font-weight:800;color:#f97316}
+    .qty{display:inline-flex;align-items:center;border:1px solid #374151;border-radius:10px;overflow:hidden}
+    .qty button{background:#111827;color:#e5e7eb;border:none;width:30px;height:32px;font-weight:800;cursor:pointer}
+    .qty input{width:46px;height:32px;text-align:center;background:#0b1220;color:#e5e7eb;border:none}
+    .del{background:#1f2937;border:1px solid #374151;color:#e5e7eb;width:36px;height:36px;border-radius:10px;cursor:pointer}
+
+    /* Resumen */
+    .resume .line{display:flex;justify-content:space-between;margin:.4rem 0}
+    .resume .total{font-size:22px;font-weight:900;color:#f97316}
+    .resume .cta{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+
+    /* Header mínimo (copiado del index) */
+    .pcf-header{background:#212526;color:#fff;border-bottom:2px solid #e0682c}
+    .pcf-wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto auto 1fr auto;gap:14px;align-items:center;padding:10px 16px}
+    .pcf-logo img{height:38px;display:block}
+    .pcf-burger{display:flex;align-items:center;gap:10px;background:transparent;border:none;color:#fff;font-weight:700;cursor:pointer}
+    .pcf-burger i{font-size:20px}
+    .pcf-search{display:flex;align-items:center;max-width:700px;width:100%;margin:0 6px;background:#fff;border-radius:4px;overflow:hidden}
+    .pcf-search input{flex:1;border:none;padding:12px 14px;font-size:15px;outline:none}
+    .pcf-search button{background:transparent;border:none;padding:0 12px;cursor:pointer;color:#555;font-size:18px}
+    .pcf-right{display:flex;align-items:center;gap:18px}
+    .pcf-link{color:#fff;text-decoration:none;font-weight:700}
+    .pcf-cart{position:relative;color:#fff;text-decoration:none;font-size:20px}
+    .pcf-badge{position:absolute;top:-8px;right:-10px;background:#f97316; color:#111;;border-radius:999px;padding:2px 7px;font-size:12px;font-weight:800;min-width:18px;text-align:center}
+    .pcf-drawer{background:#1a1d1e;border-top:1px solid #2d3234}
+    .pcf-drawer ul{list-style:none;margin:0;padding:8px 16px;display:flex;flex-wrap:wrap;gap:12px}
+    .pcf-drawer a{color:#e5e7eb;text-decoration:none;background:#2a2f31;padding:6px 10px;border-radius:6px}
+    .pcf-config {position: absolute; right: 100px; }
+    .cfg-btn{background:transparent;border:none;color:#fff;cursor:pointer;font-size:18px;display:flex;align-items:center;line-height:1;opacity:.9}
+    .cfg-btn:hover{opacity:1}
+    .config-menu{position:absolute;right:0;top:36px;width:210px;background:#1f2325;border:1px solid #2f3538;border-radius:10px;box-shadow:0 10px 24px rgba(0,0,0,.35);padding:6px;z-index:50}
+
+    /* Footer (mismo estilo) */
+    footer{margin-top:2rem;background:#1a1a1a;color:#fff;padding:2.5rem 0;border-top:1px solid rgba(255,255,255,.1)}
+    .footer-container{display:flex;flex-wrap:wrap;justify-content:space-between;max-width:1200px;margin:0 auto;padding:0 20px;gap:2rem}
+    .footer-brand,.footer-contact{flex:1;min-width:200px}
+    .footer-brand img{margin-top:.5rem;width:12rem;height:1.7rem}
+    .footer-subtitle{font-weight:600;margin-bottom:1rem;color:#e0e0e0;position:relative;display:inline-block}
+    .footer-subtitle::after{content:'';position:absolute;left:0;bottom:-5px;width:40px;height:2px;background:orangered}
+    .footer-description,.footer-info{color:#b0b0b0;line-height:1.5;margin:.5rem 0}
+    .footer-info i{margin-right:8px;color:orangered;width:20px;text-align:center;font-size:1.5rem}
+    .footer-info a{color:#b0b0b0;text-decoration:none}
+    .footer-info:hover,.footer-info a:hover,.footer-description:hover{color:#fff;transition:color .3s}
+    .footer-copyright{width:100%;text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.05)}
+    .copyright-text{font-size:.9rem;color:#777}
+    .btn-danger{
+      background:#2b0f0f;
+      border-color:#b91c1c;
+      color:#fee2e2;
+      font-weight:700;
+      border-radius:12px;
+      transition:transform .04s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .btn-danger:hover{ background:#7f1d1d; box-shadow:0 4px 14px rgba(185,28,28,.35); }
+    .btn-danger:active{ transform:translateY(1px); }
+    .btn-danger i{ margin-right:8px; }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER (igual al del index) -->
+  <header class="pcf-header">
+    <div class="pcf-wrap">
+      <a class="pcf-logo" href="{% url 'ventas:home' %}">
+        <img src="{% static 'assets/img/Motuscar-logo.webp' %}" alt="Motuscar">
+      </a>
+
+      <button class="pcf-burger" id="btnCats" aria-expanded="false" aria-controls="catsDrawer">
+        <i class="fa-solid fa-bars"></i><span>Categorías</span>
+      </button>
+
+      <form class="pcf-search" action="{% url 'ventas:home' %}" method="get">
+        <input type="text" name="q" id="search" placeholder="Busca aquí tu producto" value="{{ request.GET.q }}">
+        <button aria-label="Buscar"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+
+      <nav class="pcf-right">
+        <a class="pcf-link" href="{% url 'login:login' %}">Iniciar Sesión <i class="fa-solid fa-caret-down"></i></a>
+        <a class="pcf-cart" href="{% url 'ventas:carrito' %}">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span id="cartBadge" class="pcf-badge">0</span>
+        </a>
+
+        <!-- Configuración: selector de tema -->
+        <div class="pcf-config">
+          <button class="cfg-btn" id="cfgBtn" aria-expanded="false" aria-haspopup="menu" aria-controls="themeMenu" title="Tema">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+          <div class="config-menu" id="themeMenu" role="menu" hidden>
+            <button class="config-menu-item" role="menuitemradio" aria-checked="false" data-theme="light">
+              <i class="fa-solid fa-sun"></i> Modo claro
+            </button>
+            <button class="config-menu-item" role="menuitemradio" aria-checked="false" data-theme="dark">
+              <i class="fa-solid fa-moon"></i> Modo oscuro
+            </button>
+            <button class="config-menu-item" role="menuitemradio" aria-checked="false" data-theme="system">
+              <i class="fa-solid fa-display"></i> Seguir al sistema
+            </button>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div id="catsDrawer" class="pcf-drawer" hidden>
+      <ul>
+        {% for c in categorias %}
+          <li><a href="{% url 'ventas:home' %}?categoria={{ c.id }}">{{ c.nombre }}</a></li>
+        {% endfor %}
+        <li><a href="{% url 'ventas:home' %}">Todas las categorías</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="wrap">
+    <h1 style="margin-bottom:10px">Carrito de compras</h1>
+
+    <div class="carrito-grid">
+      <!-- LISTA -->
+      <section class="panel">
+        <div class="top-actions">
+          <a class="btn" href="{% url 'ventas:home' %}"><i class="fa-solid fa-chevron-left"></i> Seguir comprando</a>
+          <button id="btnClear" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Vaciar carrito</button>
+        </div>
+
+        <div id="empty" class="empty" hidden>
+          Tu carrito está vacío.
+        </div>
+
+        <div id="listWrap">
+          <table class="cart">
+            <thead>
+              <tr>
+                <th style="width:52%">Producto</th>
+                <th style="width:12%">Precio</th>
+                <th style="width:18%">Cantidad</th>
+                <th style="width:12%">Subtotal</th>
+                <th style="width:6%"></th>
+              </tr>
+            </thead>
+            <tbody id="cartBody"><!-- rows dinámicas --></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- RESUMEN -->
+      <aside class="panel resume">
+        <h3>Resumen</h3>
+        <div class="line"><span>Artículos</span><span id="sumItems">0</span></div>
+        <div class="line"><span>Subtotal</span><span id="sumSub">$ 0</span></div>
+        <div class="line"><span>Envío</span><span>Por calcular</span></div>
+        <hr style="border-color:#2a3345;margin:10px 0">
+        <div class="line total"><span>Total</span><span id="sumTotal">$ 0</span></div>
+
+        <div class="cta">
+          <a class="btn btn-primary" href="{% url 'ventas:checkout' %}"><i class="fa-solid fa-lock"></i> Ir a pagar</a>
+          <a class="btn btn-soft" href="{% url 'ventas:home' %}">Seguir comprando</a>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- FOOTER (como en el index) -->
+  <footer id="contacto">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <img src="{% static 'assets/img/Motuscar-logo.webp' %}" alt="">
+        <p class="footer-description">Lo mejor para tu Auto, lo mejor para tu Tiempo.</p>
+      </div>
+      <div class="footer-contact">
+        <h4 class="footer-subtitle">Contacto</h4>
+        <p class="footer-info"><i class="fas fa-envelope"></i> motusteam@yahoo.com</p>
+        <p class="footer-info"><i class="fa-brands fa-square-instagram"></i> <a href="https://www.instagram.com/motuscarusm/?utm_source=ig_web_button_share_sheet">Instagram</a></p>
+      </div>
+      <div class="footer-copyright">
+        <p class="copyright-text">© 2025 Motuscar. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    const KEY="motuscar_cart";
+    const nf = new Intl.NumberFormat("es-CL");
+    const $ = (s,el=document)=> el.querySelector(s);
+    const $$= (s,el=document)=> [...el.querySelectorAll(s)];
+
+    const cartBody = $("#cartBody");
+    const empty = $("#empty");
+    const listWrap = $("#listWrap");
+    const sumItems = $("#sumItems");
+    const sumSub = $("#sumSub");
+    const sumTotal = $("#sumTotal");
+    const badge = $("#cartBadge");
+
+    const get = () => JSON.parse(localStorage.getItem(KEY)||"[]");
+    const save = (c) => localStorage.setItem(KEY, JSON.stringify(c));
+
+    function qtyTotal(c){ return c.reduce((a,x)=>a+(x.qty||0),0); }
+    function total(c){ return c.reduce((a,x)=>a+(x.price||0)*(x.qty||0),0); }
+
+    function render(){
+      const c = get();
+      // estados vacíos
+      const isEmpty = !c.length;
+      empty.hidden = !isEmpty;
+      listWrap.style.display = isEmpty ? "none" : "";
+      // badge
+      if(badge) badge.textContent = qtyTotal(c);
+      // resumen
+      sumItems.textContent = qtyTotal(c);
+      sumSub.textContent   = "$ " + nf.format(total(c));
+      sumTotal.textContent = "$ " + nf.format(total(c));
+
+      // filas
+      cartBody.innerHTML = "";
+      c.forEach((item, idx)=>{
+        const tr = document.createElement("tr");
+        tr.className = "row";
+
+        const imgSrc = item.img || ""; // si guardaste img en detalle
+        const sku = item.sku || "";    // si guardaste sku en detalle
+
+        tr.innerHTML = `
+          <td class="col-prod">
+            ${ imgSrc ? `<img class="thumb" src="${imgSrc}" alt="">` : `<div class="thumb"></div>` }
+            <div>
+              <div class="name">${item.name||"Producto"}</div>
+              ${ sku ? `<div class="sku">SKU ${sku}</div>` : "" }
+            </div>
+          </td>
+
+          <td class="price">$ ${nf.format(item.price||0)}</td>
+
+          <td>
+            <div class="qty">
+              <button data-act="dec" data-i="${idx}">−</button>
+              <input data-act="edit" data-i="${idx}" type="number" min="1" value="${item.qty||1}">
+              <button data-act="inc" data-i="${idx}">+</button>
+            </div>
+          </td>
+
+          <td class="subt">$ ${nf.format((item.price||0)*(item.qty||0))}</td>
+
+          <td style="text-align:right">
+            <button class="del" title="Quitar" data-act="del" data-i="${idx}">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </td>
+        `;
+        cartBody.appendChild(tr);
+      });
+    }
+
+    // Delegación de eventos
+    cartBody.addEventListener("click", (e)=>{
+      const act = e.target.closest("[data-act]")?.dataset.act;
+      if(!act) return;
+      const i = +e.target.closest("[data-act]").dataset.i;
+      const c = get();
+
+      if(act==="inc"){ c[i].qty = (c[i].qty||1) + 1; }
+      if(act==="dec"){ c[i].qty = Math.max(1, (c[i].qty||1) - 1); }
+      if(act==="del"){ c.splice(i,1); }
+
+      save(c); render();
+    });
+
+    cartBody.addEventListener("input", (e)=>{
+      const el = e.target;
+      if(el.dataset.act !== "edit") return;
+      const i = +el.dataset.i;
+      const c = get();
+      let v = Math.max(1, parseInt(el.value||"1",10));
+      c[i].qty = v;
+      save(c); render();
+    });
+
+    // Vaciar carrito
+    $("#btnClear").addEventListener("click", ()=>{
+      if(confirm("¿Vaciar carrito?")){
+        save([]); render();
+      }
+    });
+
+        (function(){
+      const root = document.documentElement;
+      const KEY  = "motus_theme";
+      function prefersDark(){ return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; }
+      function applyTheme(mode){
+        const finalMode = (mode === "system") ? (prefersDark() ? "dark" : "light") : mode;
+        root.setAttribute("data-theme", finalMode);
+        localStorage.setItem(KEY, mode);
+        document.querySelectorAll(".config-menu-item").forEach(btn=>{
+          btn.setAttribute("aria-checked", String(btn.dataset.theme === mode));
+        });
+      }
+      applyTheme(localStorage.getItem(KEY) || "system");
+      const mq = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)");
+      mq && mq.addEventListener && mq.addEventListener("change", ()=> {
+        if((localStorage.getItem(KEY) || "system") === "system"){ applyTheme("system"); }
+      });
+      const cfgBtn = document.getElementById("cfgBtn");
+      const menu   = document.getElementById("themeMenu");
+      if(cfgBtn && menu){
+        cfgBtn.addEventListener("click", ()=>{
+          const open = !menu.hasAttribute("hidden");
+          if(open){ menu.setAttribute("hidden",""); cfgBtn.setAttribute("aria-expanded","false"); }
+          else { menu.removeAttribute("hidden"); cfgBtn.setAttribute("aria-expanded","true"); }
+        });
+        document.addEventListener("click",(e)=>{
+          if(!menu.contains(e.target) && !cfgBtn.contains(e.target)){
+            menu.setAttribute("hidden",""); cfgBtn.setAttribute("aria-expanded","false");
+          }
+        });
+        menu.querySelectorAll(".config-menu-item").forEach(btn=>{
+          btn.addEventListener("click", ()=>{ applyTheme(btn.dataset.theme); menu.setAttribute("hidden",""); cfgBtn.setAttribute("aria-expanded","false"); });
+        });
+      }
+    })();
+
+    // Drawer categorías del header
+    const btn = document.getElementById('btnCats');
+    const drawer = document.getElementById('catsDrawer');
+    if(btn && drawer){
+      btn.addEventListener('click', ()=>{
+        const open = !drawer.hasAttribute('hidden');
+        if(open){ drawer.setAttribute('hidden',''); btn.setAttribute('aria-expanded','false'); }
+        else { drawer.removeAttribute('hidden'); btn.setAttribute('aria-expanded','true'); }
+      });
+    }
+
+    render();
+  })();
+
+  
+  </script>
+</body>
+</html>

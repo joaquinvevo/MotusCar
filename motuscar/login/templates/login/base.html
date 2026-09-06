@@ -1,0 +1,470 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Motuscar{% endblock %}</title>
+
+  <!-- Estilos globales -->
+  <link rel="stylesheet" href="{% static 'login/css/theme.css' %}">
+  <script src="https://kit.fontawesome.com/a2e0e6adf7.js" crossorigin="anonymous"></script>
+
+  <style>
+    /* ===============================
+         PALETA DE COLORES EXACTA CON VARIABLES PARA NAVBAR
+    ================================ */
+    *,*::after,*::before{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --bg:#0b1220;
+      --text:#e5e7eb;
+      --accent:orangered;
+      --nav-bg:#212526;
+      --nav-text:#ffffff;
+    }
+    :root[data-theme="light"]{
+      --bg:#f8fafc;
+      --text:#0b1220;
+      --nav-bg:#ffffff;
+      --nav-text:#0b1220;
+    }
+    :root[data-theme="dark"]{
+      --bg:#0b1220;
+      --text:#e5e7eb;
+      --nav-bg:#212526;
+      --nav-text:#ffffff;
+    }
+
+    body{display:flex;flex-direction:column;min-height:100vh;background:var(--bg);color:var(--text);font-family:Montserrat,system-ui,Arial}
+
+    /* ===============================
+         NAVBAR CON VARIABLES CSS
+    ================================ */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: var(--nav-bg);
+      border-bottom: 2px solid var(--accent);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      height: 35px;
+      width: auto;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    /* ===============================
+         SELECTOR DE TEMA - CON VARIABLES CSS
+    ================================ */
+    .theme-switcher {
+      position: relative;
+    }
+
+    .cfg-btn {
+      background: none;
+      border: none;
+      color: var(--nav-text) !important;
+      font-size: 1.3rem !important;
+      padding: 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      opacity: 1 !important;
+    }
+
+    .cfg-btn:hover {
+      background: rgba(255,255,255,0.1);
+      transform: rotate(90deg);
+    }
+
+    .cfg-btn .fa-gear {
+      opacity: 1 !important;
+      color: inherit !important;
+      font-size: inherit !important;
+    }
+
+    .config-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 0.5rem);
+      background: var(--nav-bg);
+      border: 1px solid var(--accent);
+      border-radius: 0.5rem;
+      min-width: 180px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 1001;
+      overflow: hidden;
+      opacity: 1;
+      transform: translateY(-8px);
+      transition: all 0.2s ease;
+    }
+
+    .config-menu:not([hidden]) {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .config-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.7rem 1rem;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: background 0.2s ease;
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .config-menu-item:hover {
+      background-color: var(--accent);
+      color: white;
+    }
+
+    .config-menu-item[aria-checked="true"] {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ===============================
+         MENÚ DE USUARIO CON VARIABLES CSS
+    ================================ */
+    .user-menu {
+      position: relative;
+    }
+
+    .user-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: none;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      color: var(--nav-text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .user-btn:hover {
+      background-color: rgba(255,255,255,0.1);
+      border-color: var(--accent);
+    }
+
+    .user-name {
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 0.5rem);
+      background-color: var(--nav-bg);
+      border: 1px solid var(--accent);
+      border-radius: 0.5rem;
+      min-width: 200px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 1001;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: all 0.2s ease;
+    }
+
+    .dropdown-menu:not([hidden]) {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.7rem 1rem;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: background 0.2s ease;
+      width: 100%;
+    }
+
+    .dropdown-item:hover {
+      background-color: var(--accent);
+      color: white;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background-color: var(--accent);
+      margin: 0.3rem 0;
+    }
+
+    /* ===============================
+         ENLACES DE NAVEGACIÓN
+    ================================ */
+    .nav-link {
+      color: var(--nav-text);
+      text-decoration: none;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .nav-link:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* ===============================
+         FOOTER
+    ================================ */
+    .footer {
+      margin-top: auto;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 2.5rem 0;
+      border-top: 1px solid rgba(255,255,255,.1);
+      text-align: center;
+    }
+
+    /* ===============================
+         CONTENIDO PRINCIPAL
+    ================================ */
+    main {
+      min-height: calc(100vh - 140px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===============================
+         RESPONSIVE
+    ================================ */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 1rem;
+      }
+      
+      .nav-right {
+        gap: 1rem;
+      }
+      
+      .user-btn span {
+        display: none;
+      }
+      
+      .user-name {
+        display: none;
+      }
+    }
+  </style>
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- ===============================
+       NAVBAR SIMPLIFICADA
+  ================================ -->
+  <header class="navbar">
+    <div class="nav-left">
+      <a href="{% url 'ventas:home' %}">
+        <img src="{% static 'login/imgs/Motuscar_logo.webp' %}" alt="Motuscar" class="logo" />
+      </a>
+    </div>
+
+    <div class="nav-right">
+      {% block navbar_links %}
+        {% if user.is_authenticated %}
+          <!-- Menú de usuario autenticado -->
+          <div class="user-menu">
+            <button id="userMenuBtn" class="user-btn" aria-expanded="false">
+              <i class="fa-solid fa-user"></i>
+              <span class="user-name">{{ user.username }}</span>
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div id="userDropdown" class="dropdown-menu" hidden>
+              <a href="{% url 'login:profile' %}" class="dropdown-item">
+                <i class="fa-solid fa-user-gear"></i> Perfil
+              </a>
+              <div class="dropdown-divider"></div>
+              <form method="post" action="{% url 'login:logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item" style="background:none;border:none;width:100%;text-align:left;cursor:pointer;">
+                  <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+                </button>
+              </form>
+            </div>
+          </div>
+        {% else %}
+          <!-- Enlaces para usuarios no autenticados -->
+        {% endif %}
+      {% endblock %}
+
+      <!-- SELECTOR DE TEMA - CON VARIABLES CSS -->
+      <div class="theme-switcher">
+        <button id="configBtn" class="cfg-btn" aria-expanded="false" title="Cambiar tema">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+
+        <div id="themeMenu" class="config-menu" hidden>
+          <button class="config-menu-item" role="menuitemradio" aria-checked="false" data-theme="light">
+            <i class="fa-solid fa-sun"></i> Modo claro
+          </button>
+          <button class="config-menu-item" role="menuitemradio" aria-checked="true" data-theme="dark">
+            <i class="fa-solid fa-moon"></i> Modo oscuro
+          </button>
+          <button class="config-menu-item" role="menuitemradio" aria-checked="false" data-theme="system">
+            <i class="fa-solid fa-display"></i> Seguir al Sistema
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===============================
+       CONTENIDO DE PÁGINA
+  ================================ -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ===============================
+       FOOTER
+  ================================ -->
+  <footer class="footer">
+    <p>© 2025 Motuscar — Todos los derechos reservados</p>
+  </footer>
+
+  <!-- ===============================
+       JAVASCRIPT
+  ================================ -->
+  <script>
+    // Sistema de temas
+    document.addEventListener("DOMContentLoaded", function() {
+      console.log('✅ Script de temas cargado');
+
+      const root = document.documentElement;
+      const configBtn = document.getElementById("configBtn");
+      const themeMenu = document.getElementById("themeMenu");
+      const themeButtons = document.querySelectorAll(".config-menu-item");
+      const STORAGE_KEY = "motuscar-theme";
+
+      // Función para aplicar tema
+      function applyTheme(theme) {
+        console.log('Aplicando tema:', theme);
+        if (theme === "system") {
+          const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          root.setAttribute("data-theme", prefersDark ? "dark" : "light");
+        } else {
+          root.setAttribute("data-theme", theme);
+        }
+        localStorage.setItem(STORAGE_KEY, theme);
+        
+        // Actualizar estado visual de los botones
+        themeButtons.forEach(btn => {
+          const isActive = btn.getAttribute("data-theme") === theme;
+          btn.setAttribute("aria-checked", isActive);
+        });
+      }
+
+      // Cargar tema inicial
+      const savedTheme = localStorage.getItem(STORAGE_KEY) || "dark";
+      console.log('Tema guardado:', savedTheme);
+      applyTheme(savedTheme);
+
+      // Configurar botón de tema
+      if (configBtn && themeMenu) {
+        configBtn.addEventListener("click", function(e) {
+          e.stopPropagation();
+          const isExpanded = configBtn.getAttribute("aria-expanded") === "true";
+          configBtn.setAttribute("aria-expanded", !isExpanded);
+          themeMenu.hidden = isExpanded;
+        });
+
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener("click", function() {
+          themeMenu.hidden = true;
+          configBtn.setAttribute("aria-expanded", "false");
+        });
+
+        // Prevenir que el clic en el menú lo cierre
+        themeMenu.addEventListener("click", function(e) {
+          e.stopPropagation();
+        });
+
+        // Configurar botones de tema
+        themeButtons.forEach(function(btn) {
+          btn.addEventListener("click", function() {
+            const selectedTheme = this.getAttribute("data-theme");
+            console.log('Tema seleccionado:', selectedTheme);
+            applyTheme(selectedTheme);
+            themeMenu.hidden = true;
+            configBtn.setAttribute("aria-expanded", "false");
+          });
+        });
+      }
+
+      // Detectar cambios del sistema
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(e) {
+        const savedTheme = localStorage.getItem(STORAGE_KEY);
+        if (savedTheme === "system") {
+          root.setAttribute("data-theme", e.matches ? "dark" : "light");
+        }
+      });
+    });
+
+    // Menú de usuario
+    document.addEventListener("DOMContentLoaded", function() {
+      const userBtn = document.getElementById("userMenuBtn");
+      const dropdown = document.getElementById("userDropdown");
+
+      if (userBtn && dropdown) {
+        userBtn.addEventListener("click", function(e) {
+          e.stopPropagation();
+          const expanded = userBtn.getAttribute("aria-expanded") === "true";
+          userBtn.setAttribute("aria-expanded", !expanded);
+          dropdown.hidden = expanded;
+        });
+
+        document.addEventListener("click", function() {
+          dropdown.hidden = true;
+          userBtn.setAttribute("aria-expanded", "false");
+        });
+
+        dropdown.addEventListener("click", function(e) {
+          e.stopPropagation();
+        });
+      }
+    });
+  </script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

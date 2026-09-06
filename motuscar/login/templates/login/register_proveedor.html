@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Proveedor — Motuscar</title>
+  <link rel="stylesheet" href="{% static 'login/css/register.css' %}">
+  <link rel="icon" href="{% static 'login/imgs/motusicon64x64.webp' %}">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header>
+    <a href="/"><img src="{% static 'login/imgs/Motuscar_logo.webp' %}" alt="Motuscar" class="logo"></a>
+    <a href="{% url 'login:login' %}" class="nav-link">Iniciar sesión</a>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main>
+    <div class="register-card">
+      <img src="{% static 'login/imgs/icon_proveedor.svg' %}" alt="Proveedor" class="register-icon">
+      <h1>Registro de Proveedor</h1>
+      <p class="subtitle">Publica tu catálogo y vende repuestos directamente a los clientes.</p>
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="nombre_empresa">Nombre de la empresa</label>
+          <input type="text" id="nombre_empresa" name="nombre_empresa" placeholder="Ej: Repuestos MotorTech Ltda." required>
+        </div>
+
+        <div class="form-group">
+          <label for="rut">RUT de la empresa</label>
+          <input type="text" id="rut" name="rut" placeholder="Ej: 76.543.210-K" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" name="email" placeholder="contacto@empresa.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password1">Contraseña</label>
+          <input type="password" id="password1" name="password1" placeholder="Crea una contraseña" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password2">Confirmar contraseña</label>
+          <input type="password" id="password2" name="password2" placeholder="Repite tu contraseña" required>
+        </div>
+
+        <div class="form-group">
+          <label for="telefono">Teléfono de contacto</label>
+          <input type="text" id="telefono" name="telefono" placeholder="Ej: +56 9 8888 7777">
+        </div>
+
+        <div class="form-group">
+          <label for="direccion">Dirección</label>
+          <input type="text" id="direccion" name="direccion" placeholder="Ej: Av. O’Higgins 789, Santiago">
+        </div>
+
+        <div class="form-group">
+          <label for="categoria">Categoría de productos</label>
+          <select id="categoria" name="categoria" required>
+            <option value="">Selecciona una categoría</option>
+            <option value="repuestos">Repuestos</option>
+            <option value="accesorios">Accesorios</option>
+            <option value="lubricantes">Lubricantes</option>
+            <option value="herramientas">Herramientas</option>
+            <option value="otros">Otros</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="sitio_web">Sitio web (opcional)</label>
+          <input type="url" id="sitio_web" name="sitio_web" placeholder="https://www.motorshop.cl">
+        </div>
+
+        <button type="submit">Registrarme</button>
+      </form>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2025 Motuscar — Todos los derechos reservados
+  </footer>
+</body>
+</html>

@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #0b1220;
+  --card-bg: #141a22;
+  --text: #e5e7eb;
+  --muted: #aeb3bb;
+  --accent: #e0682c;
+  --border: rgba(255, 255, 255, 0.1);
+  --input-bg: #1e2329;
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* NAVBAR */
+header {
+  background: #212526;
+  border-bottom: 2px solid var(--accent);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.logo {
+  height: 50px;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--accent);
+}
+
+/* CONTENEDOR CENTRAL */
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem;
+}
+
+/* TARJETA DE REGISTRO */
+.register-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 2.5rem 2rem;
+  width: 420px;
+  text-align: center;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border);
+}
+
+.register-icon {
+  width: 70px;
+  margin-bottom: 1.2rem;
+}
+
+h1 {
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+  font-size: 1.6rem;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 1.8rem;
+}
+
+/* FORMULARIO */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  text-align: left;
+}
+
+label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+  display: block;
+  color: var(--text);
+}
+
+input {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+input::placeholder {
+  color: var(--muted);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #242a31;
+}
+
+/* BOTÓN */
+button {
+  width: 100%;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease;
+  margin-top: 0.5rem;
+}
+
+button:hover {
+  background: #f0723a;
+  transform: translateY(-2px);
+}
+
+/* FOOTER */
+footer {
+  background: #212526;
+  border-top: 2px solid var(--accent);
+  text-align: center;
+  padding: 1rem;
+  color: #e5e7eb;
+  font-size: 0.9rem;
+  margin-top: auto;
+}
+
+select {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #242a31;
+}
+

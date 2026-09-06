@@ -1,0 +1,834 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motuscar | Lo mejor para tu Auto, lo mejor para tu Tiempo</title>
+
+  <link rel="stylesheet" href="{% static 'ventas/css/styles.css' %}">
+  <script src="{% static 'ventas/js/scripts.js' %}" defer></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    *,*::after,*::before{margin:0;padding:0;box-sizing:border-box}
+    :root{--bg:#0b1220;--text:#e5e7eb;--accent:#e0682c}
+    :root[data-theme="light"]{--bg:#f8fafc;--text:#0b1220}
+    :root[data-theme="dark"]{--bg:#0b1220;--text:#e5e7eb}
+
+    body{display:flex;flex-direction:column;min-height:100vh;background:var(--bg);color:var(--text);font-family:Montserrat,system-ui,Arial}
+
+    /* Navbar MotusCar */
+    .motus-nav{background:#212526;color:#fff;border-bottom:2px solid #e0682c}
+    .motus-wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto auto 1fr auto;gap:14px;align-items:center;padding:10px 16px}
+    .motus-logo img{height:38px;display:block}
+    .motus-burger{display:flex;align-items:center;gap:10px;background:transparent;border:none;color:#fff;font-weight:700;cursor:pointer}
+    .motus-burger i{font-size:20px}
+    .motus-search{display:flex;align-items:center;max-width:700px;width:100%;margin:0 6px;background:#fff;border-radius:4px;overflow:hidden}
+    .motus-search input{flex:1;border:none;padding:12px 14px;font-size:15px;outline:none}
+    .motus-search button{background:transparent;border:none;padding:0 12px;cursor:pointer;color:#555;font-size:18px}
+    .motus-right{display:flex;align-items:center;gap:18px}
+
+    /* Botones generales */
+    .motus-btn{color:#fff;text-decoration:none;font-weight:700;display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:4px;transition:background 0.2s}
+    .motus-btn:hover{background:rgba(255,255,255,0.1)}
+
+    /* Carrito */
+    .motus-cart{position:relative;color:#fff;text-decoration:none;font-size:20px;padding:8px;border-radius:4px;transition:background 0.2s}
+    .motus-cart:hover{background:rgba(255,255,255,0.1)}
+    .motus-badge{position:absolute;top:-8px;right:-10px;background:#f97316;color:#111;border-radius:999px;padding:2px 7px;font-size:12px;font-weight:800;min-width:18px;text-align:center}
+
+    /* === Menú de usuario hamburguesa === */
+    .motus-user{position:relative;display:inline-block}
+    .motus-user-btn{background:none;border:1px solid #4b5563;color:#f8fafc;font-weight:600;font-size:0.95rem;padding:8px 12px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.2s ease}
+    .motus-user-btn:hover{background-color:#1e293b;border-color:#6b7280}
+    .user-name{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .motus-user-btn i{font-size:0.8rem;transition:transform 0.2s ease}
+    .motus-user-btn[aria-expanded="true"] i.fa-chevron-down{transform:rotate(180deg)}
+
+    /* Menú desplegable del usuario */
+    .motus-dmenu{position:absolute;right:0;top:calc(100% + 0.5rem);background-color:#0f172a;border:1px solid #334155;border-radius:0.5rem;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:1000;overflow:hidden;opacity:0;transform:translateY(-8px);transition:all 0.2s ease}
+    .motus-dmenu:not([hidden]){opacity:1;transform:translateY(0)}
+    .motus-ditem{display:flex;align-items:center;gap:0.6rem;padding:0.7rem 1rem;color:#e5e7eb;text-decoration:none;font-size:0.95rem;transition:background 0.2s ease;width:100%}
+    .motus-ditem:hover{background-color:#1e293b}
+    .motus-dbtn{background:none;border:none;width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer}
+    .motus-divider{height:1px;background-color:#334155;margin:0.3rem 0}
+
+    /* Configuración de tema */
+    .motus-config{position:relative}
+    .cfg-btn{background:none;border:none;color:#fff;font-size:18px;padding:8px;border-radius:4px;cursor:pointer;transition:background 0.2s}
+    .cfg-btn:hover{background:rgba(255,255,255,0.1)}
+    .config-menu{position:absolute;right:0;top:calc(100% + 0.5rem);background:#0f172a;border:1px solid #334155;border-radius:0.5rem;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:1000;overflow:hidden;opacity:0;transform:translateY(-8px);transition:all 0.2s ease}
+    .config-menu:not([hidden]){opacity:1;transform:translateY(0)}
+    .config-menu-item{display:flex;align-items:center;gap:0.6rem;padding:0.7rem 1rem;color:#e5e7eb;text-decoration:none;font-size:0.95rem;transition:background 0.2s ease;width:100%;background:none;border:none;cursor:pointer;text-align:left}
+    .config-menu-item:hover{background-color:#1e293b}
+    .config-menu-item[aria-checked="true"]{color:#e0682c}
+
+    /* Drawer categorías */
+    .motus-drawer{background:#1a1d1e;border-top:1px solid #2d3234}
+    .motus-drawer ul{list-style:none;margin:0;padding:8px 16px;display:flex;flex-wrap:wrap;gap:12px}
+    .motus-drawer a{color:#e5e7eb;text-decoration:none;background:#2a2f31;padding:6px 10px;border-radius:6px}
+
+    /* Contenido principal */
+    .ventas-main{margin:2rem auto;max-width:1200px;padding:0 16px}
+    .ventas-grid{display:grid;grid-template-columns:320px 1fr;gap:24px}
+    .filtros{position:sticky; top:88px; background:#111827; border:1px solid #374151; border-radius:12px; padding:16px; color:#e5e7eb}
+    .filtros h2{margin:0 0 .6rem}
+    .filtros label{display:block;margin:.8rem 0 .25rem}
+    .filtros input,.filtros select{width:100%;padding:8px;border-radius:8px;border:1px solid #374151;background:#0b1220;color:#e5e7eb}
+    .btn-apply{margin-top:.8rem;width:100%;padding:10px;border-radius:8px;border:1px solid #f97316;background:#f97316;color:#111;cursor:pointer}
+    .barra{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px}
+    .barra .left{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    .ordenar{padding:8px;border-radius:8px;border:1px solid #374151;background:#0b1220;color:#e5e7eb}
+    .pill{display:inline-block;padding:6px 10px;border:1px solid #d1d5db;border-radius:999px;font-size:12px;color:#e5e7eb;background:#0b1220}
+    .productos{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:18px}
+    @media (min-width: 1200px){ .productos{ grid-template-columns:repeat(3, 1fr);} }
+    @media (min-width: 1500px){ .productos{ grid-template-columns:repeat(4, 1fr);} }
+    .card{background:#111827;border:1px solid #2a3345;border-radius:14px;padding:16px;color:#e5e7eb; box-shadow:0 6px 16px rgba(0,0,0,.18)}
+    .card h3{margin:.25rem 0 0 0}
+    .card .sub{font-size:13px;color:#9ca3af}
+    .card .price{color:#f97316;font-weight:800;margin:.6rem 0;font-size:18px}
+    .card .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;margin-bottom:8px;background:#065f46}
+    .card .badge.oos{background:#7f1d1d}
+    .card img{display:block;width:100%;height:160px;object-fit:cover;border-radius:10px;margin-bottom:8px}
+    .paginacion{display:flex;gap:.5rem;justify-content:center;margin-top:16px}
+    .paginacion a,.paginacion span{padding:.5rem .8rem;border-radius:8px;border:1px solid #374151;color:#e5e7eb;text-decoration:none}
+    .actual{background:#f97316;border-color:#f97316;color:#111}
+    .badge-stock{
+      display:inline-block; padding:5px 10px; border-radius:999px;
+      background:#f97316; color:#0b0b0b; font-weight:800; font-size:12px; position:relative; top:-3px;
+    }
+    .range-wrap{position:relative;height:36px;margin:.4rem 0 6px}
+    .range-wrap input[type=range]{position:absolute;left:0;right:0;top:8px;width:100%;pointer-events:none;background:transparent;-webkit-appearance:none}
+    .range-wrap input[type=range]::-webkit-slider-thumb{
+      pointer-events:auto;-webkit-appearance:none; width:18px;height:18px;border-radius:50%;
+      background:#f97316;border:2px solid #fff; box-shadow:0 0 0 2px #f97316;
+    }
+    .range-wrap input[type=range]::-webkit-slider-runnable-track{height:6px;background:transparent}
+    .range-track{
+      position:absolute;left:0;right:0;top:16px;height:6px;border-radius:999px;
+      background:#2a3345;
+    }
+    .range-labels{display:flex;justify-content:space-between;font-weight:700}
+    
+    .card h3 a{
+      color:#e5e7eb;
+      text-decoration:none;
+    }
+    .card h3 a:visited{ color:#e5e7eb; }
+    .card h3 a:hover{ color:#f97316; text-decoration:underline; } 
+    .card h3 a:focus-visible{ outline:2px solid #f97316; outline-offset:2px; }
+
+    /* Footer */
+    footer{margin-top:auto;background:#1a1a1a;color:#fff;padding:2.5rem 0;border-top:1px solid rgba(255,255,255,.1)}
+    .footer-container{display:flex;flex-wrap:wrap;justify-content:space-between;max-width:1200px;margin:0 auto;padding:0 20px;gap:2rem}
+    .footer-brand,.footer-contact{flex:1;min-width:200px}
+    .footer-brand img{margin-top:.5rem;width:12rem;height:1.7rem}
+    .footer-subtitle{font-weight:600;margin-bottom:1rem;color:#e0e0e0;position:relative;display:inline-block}
+    .footer-subtitle::after{content:'';position:absolute;left:0;bottom:-5px;width:40px;height:2px;background:orangered}
+    .footer-description,.footer-info{color:#b0b0b0;line-height:1.5;margin:.5rem 0}
+    .footer-info i{margin-right:8px;color:orangered;width:20px;text-align:center;font-size:1.5rem}
+    .footer-info a{color:#b0b0b0;text-decoration:none}
+    .footer-info:hover,.footer-info a:hover,.footer-description:hover{color:#fff;transition:color .3s}
+    .footer-copyright{width:100%;text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.05)}
+    .copyright-text{font-size:.9rem;color:#777}
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .motus-wrap { gap: 10px }
+      .motus-right { gap: 12px }
+      .motus-search { max-width: none }
+      .user-name { max-width: 80px }
+    }
+
+    @media (max-width: 768px) {
+      .motus-wrap {
+        grid-template-columns: auto 1fr auto;
+        padding: 8px 12px;
+      }
+      .motus-burger span { display: none }
+      .user-name { display: none }
+      .motus-user-btn { padding: 8px }
+      .ventas-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Modal */
+    .mc-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .mc-modal[aria-hidden="false"] {
+      opacity: 1;
+      visibility: visible;
+    }
+    .mc-backdrop {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.7);
+    }
+    .mc-dialog {
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 480px;
+      width: 90%;
+      position: relative;
+      z-index: 1;
+    }
+    .mc-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: #e5e7eb;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .mc-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .mc-check {
+      background: #10b981;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    .mc-body {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .mc-body img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .mc-info {
+      flex: 1;
+    }
+    .mc-name {
+      color: #e5e7eb;
+      text-decoration: none;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .mc-sku {
+      color: #9ca3af;
+      font-size: 14px;
+    }
+    .mc-price {
+      text-align: right;
+    }
+    .mc-total {
+      color: #f97316;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .mc-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .btn-soft-orange {
+      background: #fed7aa;
+      color: #7c2d12;
+    }
+    .btn-dark {
+      background: #374151;
+      color: #e5e7eb;
+    }
+    .btn-primary {
+      background: #f97316;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover {
+      background: #ea580c;
+    }
+    .btn-primary:disabled {
+      background: #6b7280;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<!-- Modal: producto agregado -->
+<div id="cartModal" class="mc-modal" aria-hidden="true">
+  <div class="mc-backdrop"></div>
+  <div class="mc-dialog" role="dialog" aria-modal="true" aria-labelledby="mcTitle">
+    <button class="mc-close" id="mcClose" aria-label="Cerrar">×</button>
+
+    <div class="mc-head">
+      <span class="mc-check">✓</span>
+      <h3 id="mcTitle">Producto agregado al carro de compras</h3>
+    </div>
+
+    <div class="mc-body">
+      <img id="mcImg" src="" alt="" />
+      <div class="mc-info">
+        <a id="mcName" class="mc-name" href="javascript:void(0)"></a>
+        <div class="mc-sku" id="mcSku"></div>
+      </div>
+      <div class="mc-price">
+        <div class="mc-total" id="mcTotal"></div>
+      </div>
+    </div>
+
+    <div class="mc-actions">
+      <button id="mcContinue" class="btn btn-soft-orange">Seguir comprando</button>
+      <a id="mcGoCart" href="{% url 'ventas:carrito' %}" class="btn btn-dark">Ir al carrito</a>
+    </div>
+  </div>
+</div>
+
+<body>
+  <!-- NUEVA NAVBAR MOTUSCAR -->
+  <nav class="motus-nav">
+    <div class="motus-wrap">
+      <!-- Logo -->
+      <a class="motus-logo" href="{% url 'ventas:home' %}">
+        <img src="{% static 'assets/img/Motuscar-logo.webp' %}" alt="Motuscar">
+      </a>
+
+      <!-- Menú principal -->
+      <button class="motus-burger" id="btnCats" aria-expanded="false" aria-controls="catsDrawer">
+        <i class="fa-solid fa-bars"></i><span>Categorías</span>
+      </button>
+
+      <!-- Búsqueda -->
+      <form class="motus-search" action="" method="get">
+        <input type="text" name="q" id="search" placeholder="Busca aquí tu producto" value="{{ request.GET.q }}">
+        <button aria-label="Buscar"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+
+      <!-- Navegación derecha -->
+      <div class="motus-right">
+        {% if user.is_authenticated %}
+          <!-- Menú de usuario hamburguesa -->
+          <div class="motus-user">
+            <button class="motus-user-btn" id="userMenuBtn" aria-expanded="false" aria-controls="userMenu" aria-haspopup="menu" title="Cuenta">
+              <i class="fa-solid fa-user"></i>
+              <span class="user-name">{{ user.username }}</span>
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+
+            <div class="motus-dmenu" id="userMenu" role="menu" hidden>
+              <a class="motus-ditem" role="menuitem" href="{% url 'login:profile' %}">
+                <i class="fa-solid fa-user-gear"></i> Perfil
+              </a>
+              <a class="motus-ditem" role="menuitem" href="#">
+                <i class="fa-solid fa-receipt"></i> Mis Compras
+              </a>
+              <div class="motus-divider"></div>
+              <form method="post" action="{% url 'login:logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="motus-ditem motus-dbtn" role="menuitem">
+                  <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+                </button>
+              </form>
+            </div>
+          </div>
+        {% else %}
+          <!-- Botón de Login -->
+          <a class="motus-btn" href="{% url 'login:login' %}">
+            <i class="fa-solid fa-right-to-bracket"></i> Login
+          </a>
+        {% endif %}
+
+        <!-- Carrito -->
+        <a class="motus-cart" href="{% url 'ventas:carrito' %}">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span id="cartBadge" class="motus-badge">0</span>
+        </a>
+
+        <!-- Configuración del tema -->
+        <div class="motus-config">
+          <button class="cfg-btn" id="cfgBtn" aria-expanded="false" aria-haspopup="menu" aria-controls="themeMenu" title="Tema">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+          <div class="config-menu" id="themeMenu" role="menu" hidden>
+            <button class="config-menu-item" role="menuitemradio" aria-checked="false" data-theme="light">
+              <i class="fa-solid fa-sun"></i> Modo claro
+            </button>
+            <button class="config-menu-item" role="menuitemradio" aria-checked="false" data-theme="dark">
+              <i class="fa-solid fa-moon"></i> Modo oscuro
+            </button>
+            <button class="config-menu-item" role="menuitemradio" aria-checked="false" data-theme="system">
+              <i class="fa-solid fa-display"></i> Seguir al sistema
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drawer de categorías -->
+    <div id="catsDrawer" class="motus-drawer" hidden>
+      <ul>
+        {% for c in categorias %}
+          <li><a href="?categoria={{ c.id }}">{{ c.nombre }}</a></li>
+        {% endfor %}
+        <li>
+          <a href="?">Todas las categorías</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- CONTENIDO -->
+  <main class="ventas-main">
+    <div class="ventas-grid">
+      <!-- FILTROS -->
+      <aside class="filtros">
+        <h2><i class="fas fa-filter"></i> Filtros</h2>
+        <form id="filtros" method="get" action="">
+          <input type="hidden" name="page" value="1">
+          <input type="hidden" name="categoria" value="{{ request.GET.categoria|default:'' }}">
+          <input type="hidden" name="q" value="{{ request.GET.q|default:'' }}">
+
+          <label for="region">Región</label>
+          <select id="region" name="region" class="ordenar">
+            <option value="">Todas</option>
+            {% for r in regiones %}
+              <option value="{{ r }}" {% if request.GET.region == r %}selected{% endif %}>{{ r }}</option>
+            {% endfor %}
+          </select>
+
+          <label for="comuna" style="margin-top:.6rem">Comuna</label>
+          <select id="comuna" name="comuna" class="ordenar">
+            <option value="">Todas</option>
+            {% for c in comunas %}
+              <option value="{{ c }}" {% if request.GET.comuna == c %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+          </select>
+
+          <label>Rango de precio</label>
+          <div class="range-wrap">
+            <input type="range" id="pmin" name="precio_min" min="0" max="{{ max_precio|default:1000000 }}" value="{{ request.GET.precio_min|default:0 }}">
+            <input type="range" id="pmax" name="precio_max" min="0" max="{{ max_precio|default:1000000 }}" value="{{ request.GET.precio_max|default:max_precio|default:1000000 }}">
+            <div class="range-track"></div>
+          </div>
+          <div class="range-labels">
+            <span id="lmin">$0</span>
+            <span id="lmax">$0</span>
+          </div>
+
+          <label for="orden" style="margin-top:.6rem">Ordenar</label>
+          <select id="orden" name="orden" class="ordenar">
+            <option value="">Relevancia</option>
+            <option value="precio_asc"  {% if request.GET.orden == 'precio_asc' %}selected{% endif %}>Precio: menor a mayor</option>
+            <option value="precio_desc" {% if request.GET.orden == 'precio_desc' %}selected{% endif %}>Precio: mayor a menor</option>
+            <option value="nombre_asc"  {% if request.GET.orden == 'nombre_asc' %}selected{% endif %}>Nombre: A → Z</option>
+            <option value="nombre_desc" {% if request.GET.orden == 'nombre_desc' %}selected{% endif %}>Nombre: Z → A</option>
+          </select>
+
+          <script>
+            (function(){
+              const form = document.getElementById('filtros')
+              if(!form) return;
+              ['region','comuna','orden'].forEach(id=>{
+                const el = document.getElementById(id);
+                if(!el) return;
+                el.addEventListener('change', ()=>{
+                  const pageHidden = form.querySelector('input[name="page"]');
+                  if(pageHidden) pageHidden.value = 1;
+                  form.requestSubmit();
+                });
+              });
+              ['pmin','pmax'].forEach(id=>{
+                const el = document.getElementById(id);
+                if(!el) return;
+                const submit = ()=>{
+                  const pageHidden = form.querySelector('input[name="page"]');
+                  if(pageHidden) pageHidden.value = 1;
+                  form.requestSubmit();
+                };
+                el.addEventListener('change', submit);
+                el.addEventListener('mouseup', submit);
+                el.addEventListener('touchend', submit);
+              });
+            })();
+          </script>
+        </form>
+      </aside>
+
+      <!-- LISTADO -->
+      <section>
+        <div class="barra">
+          <div class="left"></div>
+
+          <div class="right" style="display:flex;align-items:center;gap:14px;margin-left:auto">
+            {% if is_paginated %}
+              <nav class="pcf-pager" aria-label="Paginación">
+                {% with page=page_obj.number total=page_obj.paginator.num_pages %}
+                  {% if page == 1 %}
+                    <span class="pg current">1</span>
+                  {% else %}
+                    <a class="pg" href="?page=1{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}">1</a>
+                  {% endif %}
+                  {% if page > 3 %}
+                    <span class="pg dots">…</span>
+                  {% endif %}
+                  {% for p in page_obj.paginator.page_range %}
+                    {% if p > 1 and p < total and p >= page|add:-1 and p <= page|add:1 %}
+                      {% if p == page %}
+                        <span class="pg current">{{ p }}</span>
+                      {% else %}
+                        <a class="pg" href="?page={{ p }}{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}">{{ p }}</a>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                  {% if page < total|add:-2 %}
+                    <span class="pg dots">…</span>
+                  {% endif %}
+                  {% if total > 1 %}
+                    {% if page == total %}
+                      <span class="pg current">{{ total }}</span>
+                    {% else %}
+                      <a class="pg" href="?page={{ total }}{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}">{{ total }}</a>
+                    {% endif %}
+                  {% endif %}
+                {% endwith %}
+              </nav>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="productos" id="grid">
+          {% for p in productos %}
+            <article class="card" data-name="{{ p.nombre_producto|lower }}" data-sku="{{ p.codigo_sku|lower }}">
+              {% if p.stock_actual > 0 %}
+                <span class="badge-stock">En stock</span>
+              {% else %}
+                <span class="badge oos">Agotado</span>
+              {% endif %}
+
+              {% with seed=p.codigo_sku|default:p.id_producto kw="car,engine,parts" %}
+                <a href="{% url 'ventas:detalle' p.codigo_sku %}">
+                  <img src="{% static 'ventas/img/' %}{{ p.codigo_sku }}.jpg" alt="{{ p.nombre_producto }}" loading="lazy">
+                </a>
+              {% endwith %}
+
+              <h3>
+                <a href="{% url 'ventas:detalle' p.codigo_sku %}">{{ p.nombre_producto }}</a>
+              </h3>
+
+              <div class="sub">SKU {{ p.codigo_sku }}{% if p.categoria %} — {{ p.categoria.nombre }}{% endif %}</div>
+              <div class="price" data-raw="{{ p.precio_unitario }}">$ {{ p.precio_unitario }}</div>
+
+              <div style="display:flex;gap:8px;margin-top:.5rem">
+                <button class="btn btn-primary add"
+                        data-id="{{ p.id_producto }}"
+                        data-name="{{ p.nombre_producto }}"
+                        data-price="{{ p.precio_unitario }}"
+                        data-sku="{{ p.codigo_sku }}"
+                        data-img="{% if p.imagen %}{{ p.imagen.url }}{% else %}{% static 'ventas/img/placeholder-product.png' %}{% endif %}"
+                        {% if p.stock_actual == 0 %}disabled{% endif %}>
+                  <i class="fa-solid fa-cart-plus"></i> Agregar al carrito
+                </button>
+              </div>
+            </article>
+          {% empty %}
+            <p>No se encontraron productos con los filtros seleccionados.</p>
+          {% endfor %}
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="contacto">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <img src="{% static 'assets/img/Motuscar-logo.webp' %}" alt="">
+        <p class="footer-description">Lo mejor para tu Auto, lo mejor para tu Tiempo.</p>
+      </div>
+      <div class="footer-contact">
+        <h4 class="footer-subtitle">Contacto</h4>
+        <p class="footer-info"><i class="fas fa-envelope"></i> motusteam@yahoo.com</p>
+        <p class="footer-info"><i class="fa-brands fa-square-instagram"></i> <a href="https://www.instagram.com/motuscarusm/?utm_source=ig_web_button_share_sheet">Instagram</a></p>
+      </div>
+      <div class="footer-copyright">
+        <p class="copyright-text">© 2025 Motuscar. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS existente + slider + modal + filtros -->
+<script>
+  (function(){
+    const KEY="motuscar_cart";
+    const nf=new Intl.NumberFormat("es-CL");
+    const pill=document.getElementById("pillTotal");
+    const search=document.getElementById("search");
+    const badge=document.getElementById("cartBadge");
+
+    const get=()=>JSON.parse(localStorage.getItem(KEY)||"[]");
+    const save=c=>localStorage.setItem(KEY, JSON.stringify(c));
+    const total=()=>get().reduce((a,x)=>a+x.price*x.qty,0);
+    const qtyTotal=()=>get().reduce((a,x)=>a+(x.qty||0),0);
+
+    function refresh(){
+      if(pill) pill.textContent = nf.format(total());
+      if(badge) badge.textContent = qtyTotal();
+    }
+
+    /* Modal */
+    const MOD   = document.getElementById("cartModal");
+    const MIMG  = document.getElementById("mcImg");
+    const MNAME = document.getElementById("mcName");
+    const MSKU  = document.getElementById("mcSku");
+    const MTOT  = document.getElementById("mcTotal");
+    const MCLOSE= document.getElementById("mcClose");
+    const MCONT = document.getElementById("mcContinue");
+
+    function openModal({name, sku, price, img}){
+      if(!MOD) return;
+      MIMG && (MIMG.src = img || "{% static 'assets/img/Motuscar-logo.webp' %}", MIMG.alt = name || "");
+
+      MNAME && (MNAME.textContent = name || "");
+      MSKU && (MSKU.textContent = sku ? `SKU ${sku}` : "");
+      MTOT && (MTOT.textContent = "$ " + nf.format(Number(price||0)));
+      MOD.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal(){
+      if(!MOD) return;
+      MOD.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+    }
+    MCLOSE && MCLOSE.addEventListener("click", closeModal);
+    MCONT  && MCONT.addEventListener("click", closeModal);
+    MOD    && MOD.addEventListener("click", (e)=>{ if(e.target===MOD || e.target.classList.contains("mc-backdrop")) closeModal(); });
+    document.addEventListener("keydown", (e)=>{ if(e.key==="Escape" && MOD && MOD.getAttribute("aria-hidden")==="false") closeModal(); });
+
+    /* Agregar al carrito */
+    document.querySelectorAll(".add").forEach(b=>{
+      b.addEventListener("click",()=>{
+        const c = get();
+        const card  = b.closest(".card");
+        const id    = Number(b.dataset.id);
+        const name  = b.dataset.name;
+        const price = Number(b.dataset.price || 0);
+        const sku   = (b.dataset.sku || card?.getAttribute("data-sku") || "").toUpperCase();
+        const img   = card?.querySelector("img")?.src || b.dataset.img || "{% static 'assets/img/Motuscar-logo.webp' %}";
+
+
+        const i = c.findIndex(x=>x.id===id);
+        if(i>=0){
+          c[i].qty += 1;
+          if(!c[i].sku) c[i].sku = sku;
+          if(!c[i].img) c[i].img = img;
+        }else{
+          c.push({ id, name, price, qty:1, sku, img });
+        }
+        save(c); refresh();
+
+        b.textContent = "Agregado ✓";
+        setTimeout(()=> b.textContent = "Agregar al carrito", 900);
+
+        openModal({ name, sku, price, img });
+      });
+    });
+
+    /* Funcionalidad del menú de usuario */
+    document.addEventListener('DOMContentLoaded', function() {
+      const userMenuBtn = document.getElementById('userMenuBtn');
+      const userMenu = document.getElementById('userMenu');
+      const cfgBtn = document.getElementById('cfgBtn');
+      const themeMenu = document.getElementById('themeMenu');
+      
+      // Toggle menú de usuario
+      if (userMenuBtn && userMenu) {
+        userMenuBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const isExpanded = this.getAttribute('aria-expanded') === 'true';
+          this.setAttribute('aria-expanded', !isExpanded);
+          userMenu.hidden = isExpanded;
+          
+          // Cerrar otros menús
+          if (themeMenu) {
+            themeMenu.hidden = true;
+            cfgBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      
+      // Toggle menú de tema
+      if (cfgBtn && themeMenu) {
+        cfgBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const isExpanded = this.getAttribute('aria-expanded') === 'true';
+          this.setAttribute('aria-expanded', !isExpanded);
+          themeMenu.hidden = isExpanded;
+          
+          // Cerrar otros menús
+          if (userMenu) {
+            userMenu.hidden = true;
+            userMenuBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      
+      // Cerrar menús al hacer clic fuera
+      document.addEventListener('click', function() {
+        if (userMenu && !userMenu.hidden) {
+          userMenu.hidden = true;
+          userMenuBtn.setAttribute('aria-expanded', 'false');
+        }
+        if (themeMenu && !themeMenu.hidden) {
+          themeMenu.hidden = true;
+          cfgBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Prevenir que el clic dentro del menú lo cierre
+      if (userMenu) userMenu.addEventListener('click', e => e.stopPropagation());
+      if (themeMenu) themeMenu.addEventListener('click', e => e.stopPropagation());
+      
+      // Funcionalidad del tema
+      const themeButtons = document.querySelectorAll('.config-menu-item[data-theme]');
+      themeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const theme = this.getAttribute('data-theme');
+          
+          // Actualizar estado visual
+          themeButtons.forEach(btn => {
+            btn.setAttribute('aria-checked', 'false');
+          });
+          this.setAttribute('aria-checked', 'true');
+          
+          // Aplicar tema
+          applyTheme(theme);
+          
+          // Cerrar menú
+          themeMenu.hidden = true;
+          cfgBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+      
+      // Aplicar tema guardado al cargar
+      const savedTheme = localStorage.getItem('motuscar-theme') || 'system';
+      applyTheme(savedTheme);
+      
+      // Actualizar botones del tema
+      const currentThemeBtn = document.querySelector(`[data-theme="${savedTheme}"]`);
+      if (currentThemeBtn) {
+        themeButtons.forEach(btn => btn.setAttribute('aria-checked', 'false'));
+        currentThemeBtn.setAttribute('aria-checked', 'true');
+      }
+
+      // Drawer categorías
+      const btn = document.getElementById('btnCats');
+      const drawer = document.getElementById('catsDrawer');
+      if(btn && drawer){
+        btn.addEventListener('click', ()=>{
+          const open = !drawer.hasAttribute('hidden');
+          if(open){ drawer.setAttribute('hidden',''); btn.setAttribute('aria-expanded','false'); }
+          else { drawer.removeAttribute('hidden'); btn.setAttribute('aria-expanded','true'); }
+        });
+      }
+    });
+
+    // Función para aplicar el tema
+    function applyTheme(theme) {
+      const root = document.documentElement;
+      
+      if (theme === 'system') {
+        // Detectar preferencia del sistema
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        root.setAttribute('data-theme', systemPrefersDark ? 'dark' : 'light');
+      } else {
+        root.setAttribute('data-theme', theme);
+      }
+      
+      // Guardar preferencia
+      localStorage.setItem('motuscar-theme', theme);
+    }
+
+
+    /* Buscador */
+    if(search){
+      search.addEventListener("input", ()=>{
+        const q=search.value.trim().toLowerCase();
+        document.querySelectorAll("#grid .card, .productos .card").forEach(card=>{
+          const ok=(card.dataset.name||"").includes(q)||(card.dataset.sku||"").includes(q);
+          card.style.display = ok ? "" : "none";
+        });
+      });
+    }
+
+    /* Formateo de precios */
+    document.querySelectorAll(".price").forEach(el=>{
+      const raw=Number(el.getAttribute("data-raw")||0);
+      el.textContent="$ "+nf.format(raw);
+    });
+
+    /* Slider doble precio */
+    const rMin = document.getElementById("pmin");
+    const rMax = document.getElementById("pmax");
+    const tBar = document.querySelector(".range-track");
+    const lMin = document.getElementById("lmin");
+    const lMax = document.getElementById("lmax");
+    const clampGap = 1000;
+
+    function fmt(n){ return "$ " + new Intl.NumberFormat("es-CL").format(+n||0); }
+    function updateSlider(){
+      if(!rMin || !rMax || !tBar) return;
+      let a = Math.min(+rMin.value, +rMax.value - clampGap);
+      let b = Math.max(+rMax.value, +rMin.value + clampGap);
+      rMin.value = a; rMax.value = b;
+      const min = +rMin.min, max = +rMax.max;
+      const left  = ((a - min) / (max - min)) * 100;
+      const right = 100 - ((b - min) / (max - min)) * 100;
+      tBar.style.background = `linear-gradient(to right,#2a3345 ${left}%,#f97316 ${left}%,#f97316 ${100-right}%,#2a3345 ${100-right}%)`;
+      lMin && (lMin.textContent = fmt(a));
+      lMax && (lMax.textContent = fmt(b));
+    }
+    [rMin,rMax].forEach(el=> el && el.addEventListener("input", updateSlider));
+    [rMin,rMax].forEach(el=> el && el.addEventListener("change", ()=> el.form.submit()));
+    updateSlider();
+
+    refresh();
+  })();
+</script>
+</body>
+</html>

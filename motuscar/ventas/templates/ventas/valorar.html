@@ -1,0 +1,80 @@
+{% load static humanize %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valorar {{ p.nombre_producto }} | MotusCar</title>
+  <link rel="stylesheet" href="{% static 'ventas/css/styles.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    body { background-color: #0b1220; color: #e5e7eb; font-family: system-ui, sans-serif; display: flex; flex-direction: column; min-height: 100vh; }
+    .main-container { max-width: 600px; margin: 40px auto; width: 100%; padding: 0 20px; flex: 1; }
+    
+    .card-review { background: #111827; border: 1px solid #2a3345; border-radius: 16px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+    
+    .product-header { display: flex; gap: 20px; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #2a3345; padding-bottom: 20px; }
+    .product-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #374151; }
+    .product-info h2 { margin: 0 0 5px 0; font-size: 1.2rem; color: #fff; }
+    .product-info p { margin: 0; color: #9ca3af; font-size: 0.9rem; }
+
+    .rating-group { display: flex; justify-content: center; flex-direction: row-reverse; gap: 10px; margin: 20px 0; }
+    .rating-group input { display: none; }
+    .rating-group label { font-size: 40px; color: #374151; cursor: pointer; transition: color 0.2s; }
+    .rating-group label:hover, .rating-group label:hover ~ label,
+    .rating-group input:checked ~ label { color: #f97316; }
+
+    textarea { width: 100%; background: #0b1220; border: 1px solid #374151; color: #fff; padding: 15px; border-radius: 8px; resize: vertical; min-height: 120px; font-family: inherit; margin-bottom: 20px; }
+    textarea:focus { outline: 2px solid #f97316; border-color: transparent; }
+
+    .btn-submit { background: #f97316; color: #111; border: none; width: 100%; padding: 14px; font-weight: 800; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: background 0.2s; }
+    .btn-submit:hover { background: #ff8c42; }
+    
+    .btn-back { display: block; text-align: center; margin-top: 20px; color: #9ca3af; text-decoration: none; font-size: 0.9rem; }
+    .btn-back:hover { color: #fff; text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <header style="background:#212526; padding:15px; border-bottom:2px solid #e0682c; text-align:center;">
+    <img src="{% static 'assets/img/Motuscar-logo.webp' %}" alt="MotusCar" style="height:30px;">
+  </header>
+
+  <div class="main-container">
+    <div class="card-review">
+      <div class="product-header">
+        {% with seed=p.codigo_sku|default:p.id_producto kw=p.categoria.nombre|default:"car parts" %}
+        <img class="product-img" src="https://loremflickr.com/200/200/{{ kw|urlencode }}?lock={{ seed|urlencode }}" alt="">
+        {% endwith %}
+        <div class="product-info">
+          <h2>{{ p.nombre_producto }}</h2>
+          <p>SKU: {{ p.codigo_sku }}</p>
+        </div>
+      </div>
+
+      <form method="POST">
+        {% csrf_token %}
+        
+        <h3 style="text-align:center; margin-bottom:5px;">¿Qué te pareció el producto?</h3>
+        <p style="text-align:center; color:#9ca3af; font-size:0.9rem; margin-top:0;">Tu opinión ayuda a otros conductores.</p>
+
+        <div class="rating-group">
+          <input type="radio" name="puntuacion" id="star5" value="5" required checked><label for="star5" title="Excelente"><i class="fa-solid fa-star"></i></label>
+          <input type="radio" name="puntuacion" id="star4" value="4"><label for="star4" title="Bueno"><i class="fa-solid fa-star"></i></label>
+          <input type="radio" name="puntuacion" id="star3" value="3"><label for="star3" title="Regular"><i class="fa-solid fa-star"></i></label>
+          <input type="radio" name="puntuacion" id="star2" value="2"><label for="star2" title="Malo"><i class="fa-solid fa-star"></i></label>
+          <input type="radio" name="puntuacion" id="star1" value="1"><label for="star1" title="Pésimo"><i class="fa-solid fa-star"></i></label>
+        </div>
+
+        <label for="comentario" style="font-weight:bold; display:block; margin-bottom:8px;">Escribe tu reseña:</label>
+        <textarea name="comentario" id="comentario" placeholder="Cuéntanos sobre la calidad, durabilidad o si fue compatible con tu auto..."></textarea>
+
+        <button type="submit" class="btn-submit">Publicar Valoración</button>
+      </form>
+
+      <a href="{% url 'ventas:detalle' p.codigo_sku %}" class="btn-back">Cancelar y volver al producto</a>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,256 @@
+*,*::after,*::before{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0b1220;--text:#e5e7eb;--accent:orangered}
+:root[data-theme="light"]{--bg:#f8fafc;--text:#0b1220}
+:root[data-theme="dark"]{--bg:#0b1220;--text:#0b1220}
+
+body{display:flex;flex-direction:column;min-height:100vh;background:var(--bg);color:var(--text);font-family:Montserrat,system-ui,Arial}
+
+footer{margin-top:auto;background:#1a1a1a;color:#fff;padding:2.5rem 0;border-top:1px solid rgba(255,255,255,.1)}
+.footer-container{display:flex;flex-wrap:wrap;justify-content:space-between;max-width:1200px;margin:0 auto;padding:0 20px;gap:2rem}
+.footer-brand,.footer-contact{flex:1;min-width:200px}
+.footer-brand img{margin-top:.5rem;width:12rem;height:1.7rem}
+.footer-subtitle{font-weight:600;margin-bottom:1rem;color:#e0e0e0;position:relative;display:inline-block}
+.footer-subtitle::after{content:'';position:absolute;left:0;bottom:-5px;width:40px;height:2px;background:orangered}
+.footer-description,.footer-info{color:#b0b0b0;line-height:1.5;margin:.5rem 0}
+.footer-info i{margin-right:8px;color:orangered;width:20px;text-align:center;font-size:1.5rem}
+.footer-info a{color:#b0b0b0;text-decoration:none}
+.footer-info:hover,.footer-info a:hover,.footer-description:hover{color:#fff;transition:color .3s}
+.footer-copyright{width:100%;text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.05)}
+.copyright-text{font-size:.9rem;color:#777}
+
+/* Header estilo PCFactory */
+.pcf-header{background:#212526;color:#fff;border-bottom:2px solid #e0682c}
+.pcf-wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto auto 1fr auto;gap:14px;align-items:center;padding:10px 16px}
+.pcf-logo img{height:38px;display:block; align-items:left;}
+.pcf-burger{display:flex;align-items:center;gap:10px;background:transparent;border:none;color:#fff;font-weight:700;cursor:pointer}
+.pcf-burger i{font-size:20px}
+.pcf-search{display:flex;align-items:center;max-width:700px;width:100%;margin:0 6px;background:#fff;border-radius:4px;overflow:hidden}
+.pcf-search input{flex:1;border:none;padding:12px 14px;font-size:15px;outline:none}
+.pcf-search button{background:transparent;border:none;padding:0 12px;cursor:pointer;color:#555;font-size:18px}
+.pcf-right{display:flex;align-items:center;gap:18px}
+.pcf-link{color:#fff;text-decoration:none;font-weight:700}
+.pcf-cart{position:relative;color:#fff;text-decoration:none;font-size:20px}
+.pcf-badge{position:absolute;top:-8px;right:-10px;background:#f97316; color:#111;;border-radius:999px;padding:2px 7px;font-size:12px;font-weight:800;min-width:18px;text-align:center}
+.pcf-drawer{background:#1a1d1e;border-top:1px solid #2d3234}
+.pcf-drawer ul{list-style:none;margin:0;padding:8px 16px;display:flex;flex-wrap:wrap;gap:12px}
+.pcf-drawer a{color:#e5e7eb;text-decoration:none;background:#2a2f31;padding:6px 10px;border-radius:6px}
+.barra{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.barra .right{display:flex;align-items:center;gap:14px;margin-left:auto}
+
+/* Paginación superior estilo PCFactory */
+.pcf-pager{display:flex;align-items:center;gap:10px}
+.pcf-pager .pg{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:34px; height:34px; padding:0 10px;
+  border-radius:999px; border:1px solid #e5e7eb20;
+  background:#0b1220; color:#e5e7eb; text-decoration:none; font-weight:700;
+}
+.pcf-pager .pg:hover{background:#111827}
+.pcf-pager .current{background:#f97316; color:#111;; border-color:#f97316}
+.pcf-pager .dots{background:transparent; border:none; color:#9ca3af; cursor:default}
+.pcf-pager .next{background:#e5e7eb15}
+.pcf-pager .next.disabled{opacity:.4; pointer-events:none}
+
+@media (max-width:960px){.pcf-wrap{gap:10px}.pcf-right{gap:12px}.pcf-search{max-width:none}}
+
+/* ——— Header más eficiente ——— */
+.pcf-header{background:#212526;color:#fff;border-bottom:2px solid #e0682c}
+.pcf-wrap{
+  /* más ancho útil */
+  max-width: 1360px;            /* antes 1200 */
+  padding: 8px 16px;            /* menos alto = menos aire */
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto 140px minmax(560px,1fr) auto; /* logo | categorías | BUSCADOR | derecha */
+  align-items: center;
+  gap: 12px;                    /* antes 14 */
+}
+
+/* logo un pelín más compacto */
+.pcf-logo img{height:32px}
+
+/* botón categorías más fino */
+.pcf-burger{gap:8px;font-weight:700}
+.pcf-burger i{font-size:18px}
+
+/* buscador protagonista (altura menor y borde más compacto) */
+.pcf-search{
+  display:flex; align-items:center; width:100%;
+  background:#fff; border-radius:6px; overflow:hidden;
+}
+.pcf-search input{flex:1;border:none;padding:10px 14px;font-size:14px}
+.pcf-search button{border:none;background:transparent;padding:0 10px;font-size:18px;color:#555}
+
+/* bloque derecho: menos separación */
+.pcf-right{display:flex;align-items:center;gap:14px}
+.pcf-cart{position:relative;font-size:20px}
+.pcf-badge{top:-8px;right:-10px}
+
+/* ——— Responsive ajustes ——— */
+@media (max-width: 1100px){
+  .pcf-wrap{
+    grid-template-columns: auto 120px 1fr auto; /* comprime categorías, más a buscador */
+    gap: 10px;
+  }
+  .pcf-logo img{height:28px}
+  .pcf-right{gap:12px}
+  /* opcional: acorta texto largo para ganar espacio */
+  .pcf-link:first-child{white-space:nowrap}
+}
+@media (max-width: 860px){
+  /* prioriza buscador: ocultamos "Mis compras" y dejamos ícono de carrito */
+  .pcf-right .pcf-link:nth-child(2){display:none}
+}
+
+/* Botones genéricos */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:8px; padding:10px 14px;
+  border-radius:10px; border:1px solid transparent;
+  font-weight:800; letter-spacing:.2px; cursor:pointer;
+  transition:transform .08s ease, box-shadow .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+/* Botón principal naranja */
+.btn-primary{
+  background:#f97316;        /* naranja MotusCar */
+  color:#111; 
+  box-shadow:0 6px 14px rgba(249,115,22,.25);
+}
+.btn-primary:hover{ background:#ea6a0f; box-shadow:0 8px 18px rgba(249,115,22,.35); }
+.btn-primary:active{ transform:translateY(1px); }
+
+/* Estado deshabilitado */
+.btn:disabled{
+  background:#2a3345 !important; color:#9ca3af !important;
+  border-color:#2a3345 !important; cursor:not-allowed; box-shadow:none;
+}
+
+/* Estado “agregado” (verde) opcional */
+.btn-success{ background:#22c55e; color:#0b0b0b; border-color:#22c55e; }
+.btn-success:hover{ background:#19b254; }
+
+/* La grilla no estira verticalmente y alinea arriba */
+.ventas-grid{
+  align-items: start;           /* clave */
+  /* y asegúrate de NO tener overflow:hidden aquí */
+  overflow: visible;
+}
+
+/* El panel de filtros se ancla arriba y toma solo su propio alto */
+.filtros{
+  position: sticky;             /* se pega al hacer scroll */
+  top: 12px;                    /* ajusta según la altura del header (p.ej. 64–88px) */
+  align-self: start;            /* que empiece arriba de su celda */
+  height: max-content;          /* evita que “rellene” la fila completa */
+}
+
+/* Botón/menú de tema */
+.pcf-config{position:relative}
+.cfg-btn{background:transparent;border:none;color:#fff;cursor:pointer;font-size:18px;display:flex;align-items:center}
+.cfg-btn i{font-size:20px}
+
+.config-menu{
+  position:absolute; right:0; top:42px; width:210px;
+  background:#1f2325; border:1px solid #2f3538; border-radius:10px;
+  box-shadow:0 10px 24px rgba(0,0,0,.35); padding:6px; z-index:50;
+}
+.config-menu-item{
+  width:100%; text-align:left; display:flex; align-items:center; gap:8px;
+  padding:10px 12px; background:transparent; border:none; color:#e5e7eb; cursor:pointer;
+  border-radius:8px; font-size:14px;
+}
+.config-menu-item:hover{ background:#2a2f31 }
+.config-menu-item[aria-checked="true"]{ background:#2f4b3f; color:#d9f99d }
+
+
+/* ==== Modal carrito ==== */
+.mc-modal{position:fixed; inset:0; display:none; z-index:1000}
+.mc-modal[aria-hidden="false"]{display:block}
+.mc-backdrop{position:absolute; inset:0; background:rgba(0,0,0,.55)}
+.mc-dialog{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:min(720px,92vw); background:#fff; color:#0b0b0b; border-radius:14px;
+  overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.45);
+}
+:root[data-theme="dark"] .mc-dialog{background:#111827;color:#e5e7eb}
+
+.mc-close{
+  position:absolute; right:12px; top:12px; background:transparent; border:none;
+  font-size:24px; color:#9ca3af; cursor:pointer;
+}
+.mc-head{display:flex; align-items:center; gap:10px; padding:16px 18px; border-bottom:1px solid #e5e7eb33}
+.mc-check{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:28px; height:28px; border-radius:999px; background:#f97316; color:#111; font-weight:900;
+}
+.mc-body{display:grid; grid-template-columns:96px 1fr auto; gap:16px; padding:16px 18px}
+.mc-body img{width:96px; height:96px; object-fit:cover; border-radius:8px; background:#f3f4f6}
+.mc-name{font-weight:800; color:inherit; text-decoration:none}
+.mc-name:hover{text-decoration:underline}
+.mc-sku{font-size:12px; color:#9ca3af; margin-top:4px}
+.mc-price{display:flex; align-items:center; justify-content:flex-end}
+.mc-total{font-size:26px; font-weight:900}
+
+.mc-actions{display:flex; gap:14px; padding:14px 18px; border-top:1px solid #e5e7eb33}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:10px;border:1px solid transparent;font-weight:800;cursor:pointer}
+.btn-light{background:#d1fae5;color:#8A3A04;border-color:#FFD7B8}
+.btn-light:hover{background:#bff7d7}
+.btn-dark{background:#212526;color:#fff}
+.btn-dark:hover{background:#1a1e20}
+/* Naranja suave (simple) */
+.btn-soft-orange{
+  background:#FFE7D4;
+  color:#8A3A04;
+  border:1px solid #FFD7B8;
+  border-radius:12px;
+  padding:12px 16px;
+  font-weight:800;
+}
+.btn-soft-orange:hover{ background:#FFD9BF; }
+:root[data-theme="dark"] .btn-soft-orange{
+  background:#3A2A20;
+  color:#F7D3BD;
+  border-color:#4A3326;
+}
+.badge-stock{
+  display:inline-block; padding:6px 10px; border-radius:999px;
+  background:#16a34a; color:#0b0b0b; font-weight:800; font-size:12px; margin-top:-4px;
+}
+
+.range-wrap{position:relative;height:36px;margin:.4rem 0 6px}
+.range-wrap input[type=range]{position:absolute;left:0;right:0;top:8px;width:100%;pointer-events:none;background:transparent;-webkit-appearance:none}
+.range-wrap input[type=range]::-webkit-slider-thumb{
+  pointer-events:auto;-webkit-appearance:none; width:18px;height:18px;border-radius:50%;
+  background:#f97316;border:2px solid #fff; box-shadow:0 0 0 2px #f97316;
+}
+.range-wrap input[type=range]::-webkit-slider-runnable-track{height:6px;background:transparent}
+.range-track{
+  position:absolute;left:0;right:0;top:16px;height:6px;border-radius:999px;
+  background:#2a3345;
+}
+.range-labels{display:flex;justify-content:space-between;font-weight:700}
+
+/* Botón/menú de tema */
+.pcf-config{position:relative; margin-left: -6px;}
+.cfg-btn{background:transparent;border:none;color:#fff;cursor:pointer;font-size:18px;display:flex;align-items:center}
+.cfg-btn i{font-size:20px}
+
+.config-menu{
+  position:absolute; right:0; top:42px; width:210px;
+  background:#1f2325; border:1px solid #2f3538; border-radius:10px;
+  box-shadow:0 10px 24px rgba(0,0,0,.35); padding:6px; z-index:50;
+}
+.config-menu-item{
+  width:100%; text-align:left; display:flex; align-items:center; gap:8px;
+  padding:10px 12px; background:transparent; border:none; color:#e5e7eb; cursor:pointer;
+  border-radius:8px; font-size:14px;
+}
+.config-menu-item:hover{ background:#2a2f31 }
+.config-menu-item[aria-checked="true"]{ background:#2f4b3f; color:#d9f99d }
+
+
+
+/* El contenedor derecho ya es flex; empuja el engranaje al borde */
+.pcf-right { display:flex; align-items:center; gap:14px; }
+.pcf-config { margin-left:auto; }      /* mueve el engranaje al extremo derecho */

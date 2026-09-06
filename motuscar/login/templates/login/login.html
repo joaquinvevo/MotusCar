@@ -1,0 +1,396 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión | Mòtuscar</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0b1220;
+      --text: #e5e7eb;
+      --accent: #e0682c;
+      --card-bg: #1a1f2e;
+      --border: #374151;
+    }
+
+    :root[data-theme="light"] {
+      --bg: #f8fafc;
+      --text: #0b1220;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+
+    /* ========== NAVBAR CON COLORES LOCKED ========== */
+    .navbar {
+      background: #212526 !important; /* ✅ COLOR FIJO */
+      border-bottom: 2px solid #e0682c !important; /* ✅ COLOR FIJO */
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      height: 40px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* ========== MENÚ DESPLEGABLE COMO VENTAS ========== */
+    .motus-config {
+      position: relative;
+    }
+
+    .cfg-btn {
+      background: none;
+      border: none;
+      color: #ffffff !important; /* ✅ COLOR FIJO EN NAVBAR */
+      font-size: 1.3rem;
+      padding: 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cfg-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: rotate(90deg);
+    }
+
+    .config-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 0.5rem);
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      min-width: 180px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      z-index: 1001;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    .config-menu:not([hidden]) {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .config-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.7rem 1rem;
+      color: #e5e7eb;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: background 0.2s ease;
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .config-menu-item:hover {
+      background-color: #1e293b;
+    }
+
+    .config-menu-item[aria-checked="true"] {
+      color: #e0682c;
+      font-weight: 600;
+    }
+
+    /* ========== LOGIN CARD ========== */
+    .login-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .login-card {
+      background: var(--card-bg);
+      padding: 3rem;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .login-header h1 {
+      color: var(--accent);
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .login-header p {
+      color: var(--text);
+      opacity: 0.8;
+      font-size: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(224, 104, 44, 0.1);
+    }
+
+    .login-btn {
+      width: 100%;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+
+    .login-btn:hover {
+      background: #f97316;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(224, 104, 44, 0.3);
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 2rem;
+      color: var(--text);
+    }
+
+    .register-link a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      background: #1a1a1a !important; /* ✅ COLOR FIJO */
+      color: #ffffff !important; /* ✅ COLOR FIJO */
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: auto;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 1rem;
+      }
+
+      .login-card {
+        padding: 2rem;
+        margin: 1rem;
+      }
+
+      .login-header h1 {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR CON COLORES LOCKED -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="{% url 'ventas:home' %}">
+        <img src="{% static 'login/imgs/Motuscar_logo.webp' %}" alt="Mòtuscar" class="logo">
+      </a>
+    </div>
+    <div class="nav-right">
+      <!-- MENÚ DESPLEGABLE COMO VENTAS -->
+      <div class="motus-config">
+        <button class="cfg-btn" id="cfgBtn" aria-expanded="false" aria-haspopup="menu" aria-controls="themeMenu" title="Configuración de tema">
+          <i class="fas fa-gear"></i>
+        </button>
+        <div class="config-menu" id="themeMenu" role="menu" hidden>
+          <button class="config-menu-item" role="menuitemradio" aria-checked="false" data-theme="light">
+            <i class="fas fa-sun"></i> Modo claro
+          </button>
+          <button class="config-menu-item" role="menuitemradio" aria-checked="false" data-theme="dark">
+            <i class="fas fa-moon"></i> Modo oscuro
+          </button>
+          <button class="config-menu-item" role="menuitemradio" aria-checked="false" data-theme="system">
+            <i class="fas fa-display"></i> Seguir al Sistema
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- LOGIN FORM -->
+  <main class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <h1>Iniciar Sesión</h1>
+        <p>Accede a tu cuenta de Mòtuscar</p>
+      </div>
+
+      <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" name="email" class="form-input" placeholder="Ingresa tu correo" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" name="password" class="form-input" placeholder="Ingresa tu contraseña" required>
+        </div>
+
+        <button type="submit" class="login-btn">Ingresar</button>
+      </form>
+
+      <div class="register-link">
+        <p>¿No tienes cuenta? <a href="{% url 'login:register_selector' %}">Regístrate</a></p>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER CON COLORES LOCKED -->
+  <footer class="footer">
+    <p>© 2025 Mòtuscar — Todos los derechos reservados</p>
+  </footer>
+
+  <script>
+    // Sistema de temas con menú desplegable
+    document.addEventListener('DOMContentLoaded', function() {
+      const cfgBtn = document.getElementById('cfgBtn');
+      const themeMenu = document.getElementById('themeMenu');
+      const themeButtons = document.querySelectorAll('.config-menu-item[data-theme]');
+      const root = document.documentElement;
+      
+      // Cargar tema guardado
+      const savedTheme = localStorage.getItem('motuscar-theme') || 'dark';
+      root.setAttribute('data-theme', savedTheme);
+      
+      // Actualizar botón activo
+      themeButtons.forEach(btn => {
+        const isActive = btn.getAttribute('data-theme') === savedTheme;
+        btn.setAttribute('aria-checked', isActive);
+      });
+
+      // Toggle menú desplegable
+      if (cfgBtn && themeMenu) {
+        cfgBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const isExpanded = this.getAttribute('aria-expanded') === 'true';
+          this.setAttribute('aria-expanded', !isExpanded);
+          themeMenu.hidden = isExpanded;
+        });
+
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener('click', function() {
+          themeMenu.hidden = true;
+          cfgBtn.setAttribute('aria-expanded', 'false');
+        });
+
+        // Prevenir que el clic dentro del menú lo cierre
+        themeMenu.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+
+        // Configurar botones de tema
+        themeButtons.forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            const selectedTheme = this.getAttribute('data-theme');
+            
+            // Aplicar tema
+            root.setAttribute('data-theme', selectedTheme);
+            localStorage.setItem('motuscar-theme', selectedTheme);
+            
+            // Actualizar estado visual de los botones
+            themeButtons.forEach(button => {
+              button.setAttribute('aria-checked', 'false');
+            });
+            this.setAttribute('aria-checked', 'true');
+            
+            // Cerrar menú
+            themeMenu.hidden = true;
+            cfgBtn.setAttribute('aria-expanded', 'false');
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

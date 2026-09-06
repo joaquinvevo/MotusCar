@@ -1,0 +1,118 @@
+{% extends "login/base.html" %}
+
+{% block content %}
+<main class="profile-wrapper">
+
+  <form action="" method="POST" class="edit-card">
+    {% csrf_token %}
+
+    <h1 class="edit-title"><i class="fa-solid fa-user-pen"></i> Editar Perfil</h1>
+
+    <label>Nombre</label>
+    <input type="text" name="nombre" value="{{ user.first_name }}" required>
+
+    <label>Email</label>
+    <input type="email" name="email" value="{{ user.email }}" required>
+
+    {% if user.tipo == "cliente" %}
+      <label>Teléfono</label>
+      <input type="text" name="telefono" value="{{ user.telefono }}">
+
+      <label>Dirección</label>
+      <input type="text" name="direccion" value="{{ user.direccion }}">
+    
+    {% elif user.tipo == "mecanico" %}
+      <label>Especialidad</label>
+      <input type="text" name="especialidad" value="{{ user.especialidad }}">
+    
+    {% elif user.tipo == "proveedor" %}
+      <label>RUT</label>
+      <input type="text" name="rut" value="{{ user.last_name }}">
+
+      <label>Teléfono</label>
+      <input type="text" name="telefono" value="{{ user.telefono }}">
+
+      <label>Dirección</label>
+      <input type="text" name="direccion" value="{{ user.direccion }}">
+
+      <label>Categoría</label>
+      <input type="text" name="categoria" value="{{ user.categoria }}">
+
+      <label>Sitio Web</label>
+      <input type="text" name="sitio_web" value="{{ user.sitio_web }}">
+    {% endif %}
+
+    <button class="btn-save" type="submit">
+      <i class="fa-solid fa-floppy-disk"></i> Guardar cambios
+    </button>
+
+    <a href="{% url 'login:profile' %}" class="btn-cancel">Cancelar</a>
+  </form>
+
+</main>
+
+<style>
+.profile-wrapper {
+  min-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-card {
+  width: 100%;
+  max-width: 500px;
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+.edit-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+label {
+  margin-top: 1rem;
+  font-weight: 600;
+  display: block;
+  color: var(--text);
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: .3rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.btn-save {
+  margin-top: 1.6rem;
+  width: 100%;
+  background: #f97316;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-save:hover {
+  background: #ea580c;
+}
+
+.btn-cancel {
+  display: block;
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--muted);
+  text-decoration: none;
+}
+</style>
+
+{% endblock %}

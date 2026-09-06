@@ -1,0 +1,441 @@
+/* ==========================================================
+<<<<<<< HEAD
+   MOTUSCAR - THEME GLOBAL (Login / Register)
+   ========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+
+/* ==========================================================
+   Variables de Tema
+   ========================================================== */
+
+/* 🌙 Modo oscuro */
+:root[data-theme="dark"] {
+  --bg-color: #0b1220;
+  --text-color: #f5f6fa;
+  --accent-color: #e0682c;
+  --card-bg: #1a1a1a;
+  --input-bg: #2a2f31;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --nav-bg: #212526;
+  --nav-border: #e0682c;
+  --footer-bg: #1b1b1b;
+}
+
+/* ☀️ Modo claro */
+:root[data-theme="light"] {
+  --bg-color: #f8f9fb;
+  --text-color: #111;
+  --accent-color: #e0682c;
+  --card-bg: #ffffff;
+  --input-bg: #eeeeee;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --nav-bg: #ffffff;
+  --nav-border: #e0682c;
+  --footer-bg: #f2f2f2;
+}
+
+/* ==========================================================
+   Base
+=======
+   MOTUSCAR - THEME GLOBAL (Login / Register / Base)
+   ========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+
+/* ==========================================================
+   VARIABLES DE TEMA
+   ========================================================== */
+
+:root {
+  /* Colores modo oscuro (default) */
+  --bg-primary: #0b1220;
+  --bg-secondary: #1a1f2e;
+  --bg-hover: #2a3345;
+  --text: #e5e7eb;
+  --text-muted: #9ca3af;
+  --border: #374151;
+  --accent: #e0682c;
+  --accent-hover: #f97316;
+}
+
+[data-theme="light"] {
+  /* Colores modo claro */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-hover: #f1f5f9;
+  --text: #0b1220;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --accent: #e0682c;
+  --accent-hover: #f97316;
+}
+
+/* ==========================================================
+   BASE GLOBAL
+>>>>>>> feature/ventasylogin
+   ========================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Montserrat', system-ui, sans-serif;
+<<<<<<< HEAD
+  background-color: var(--bg-color);
+  color: var(--text-color);
+=======
+  background-color: var(--bg);
+  color: var(--text);
+>>>>>>> feature/ventasylogin
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ==========================================================
+   NAVBAR
+   ========================================================== */
+.navbar {
+  background-color: var(--nav-bg);
+  border-bottom: 2px solid var(--nav-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.navbar .logo {
+  height: 45px;
+}
+
+.navbar a {
+<<<<<<< HEAD
+  color: var(--text-color);
+=======
+  color: var(--text);
+>>>>>>> feature/ventasylogin
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 1rem;
+  transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+<<<<<<< HEAD
+  color: var(--accent-color);
+=======
+  color: var(--accent);
+>>>>>>> feature/ventasylogin
+}
+
+/* Icono engranaje (modo oscuro/claro) */
+.cfg-btn {
+  background: none;
+  border: none;
+<<<<<<< HEAD
+  color: var(--text-color);
+=======
+  color: var(--text);
+>>>>>>> feature/ventasylogin
+  font-size: 1.4rem;
+  margin-left: 1rem;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.cfg-btn:hover {
+<<<<<<< HEAD
+  color: var(--accent-color);
+=======
+  color: var(--accent);
+>>>>>>> feature/ventasylogin
+  transform: rotate(25deg);
+}
+
+/* ==========================================================
+   AUTH CARD (Login)
+   ========================================================== */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 140px);
+  padding: 2rem;
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.auth-card {
+  background-color: var(--card-bg);
+  border-radius: 1rem;
+<<<<<<< HEAD
+  border: 1px solid var(--border-color);
+=======
+  border: 1px solid var(--border);
+>>>>>>> feature/ventasylogin
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.auth-card h1 {
+  text-align: center;
+<<<<<<< HEAD
+  color: var(--accent-color);
+=======
+  color: var(--accent);
+>>>>>>> feature/ventasylogin
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.auth-card label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 500;
+<<<<<<< HEAD
+  color: var(--text-color);
+=======
+  color: var(--text);
+>>>>>>> feature/ventasylogin
+  margin-top: 1rem;
+}
+
+.auth-card input {
+  width: 100%;
+  background-color: var(--input-bg);
+<<<<<<< HEAD
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-color);
+  padding: 0.8rem;
+  margin-top: 0.3rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.auth-card input:focus {
+  border-color: var(--accent-color);
+=======
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 0.8rem;
+  margin-top: 0.3rem;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-card input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(224, 104, 44, 0.3);
+>>>>>>> feature/ventasylogin
+}
+
+.auth-card button {
+  margin-top: 1.5rem;
+  width: 100%;
+<<<<<<< HEAD
+  background: var(--accent-color);
+=======
+  background: var(--accent);
+>>>>>>> feature/ventasylogin
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
+<<<<<<< HEAD
+  transition: background-color 0.3s ease;
+=======
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+>>>>>>> feature/ventasylogin
+}
+
+.auth-card button:hover {
+  background: #ff7d3a;
+<<<<<<< HEAD
+=======
+  box-shadow: 0 3px 12px rgba(224, 104, 44, 0.4);
+>>>>>>> feature/ventasylogin
+}
+
+.auth-card p {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.auth-card a {
+<<<<<<< HEAD
+  color: var(--accent-color);
+=======
+  color: var(--accent);
+>>>>>>> feature/ventasylogin
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-card a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================
+<<<<<<< HEAD
+   CONFIG MENU
+=======
+   CONFIG MENU (modo claro/oscuro)
+>>>>>>> feature/ventasylogin
+   ========================================================== */
+.config-menu {
+  position: absolute;
+  right: 2rem;
+  top: 3.5rem;
+  background-color: var(--card-bg);
+<<<<<<< HEAD
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  min-width: 180px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.config-menu.show {
+  display: flex;
+}
+
+.config-menu-item {
+  padding: 0.8rem 1rem;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.config-menu-item:hover {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+.footer {
+  background-color: var(--footer-bg);
+  color: var(--text-color);
+  text-align: center;
+  padding: 2rem 1rem;
+  border-top: 2px solid var(--nav-border);
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.footer .footer-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.footer .footer-section {
+  margin-bottom: 1rem;
+}
+
+.footer .footer-section h4 {
+  color: var(--accent-color);
+  margin-bottom: 0.5rem;
+}
+
+.footer a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: var(--accent-color);
+=======
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  min-width: 180px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.config-menu[hidden] {
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+}
+
+.config-menu-item {
+  padding: 0.8rem 1rem;
+  background: none;
+  border: none;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.config-menu-item:hover {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+.footer {
+  background-color: var(--footer-bg);
+  color: var(--text);
+  text-align: center;
+  padding: 2rem 1rem;
+  border-top: 2px solid var(--nav-border);
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+>>>>>>> feature/ventasylogin
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    text-align: center;
+<<<<<<< HEAD
+=======
+    padding: 1rem;
+>>>>>>> feature/ventasylogin
+  }
+
+  .auth-card {
+    padding: 2rem 1.5rem;
+  }
+
+<<<<<<< HEAD
+  .footer .footer-content {
+    flex-direction: column;
+    text-align: center;
+=======
+  .config-menu {
+    right: 1rem;
+>>>>>>> feature/ventasylogin
+  }
+}

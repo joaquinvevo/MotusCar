@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Selecciona tu tipo de cuenta — Motuscar</title>
+  <link rel="stylesheet" href="{% static 'login/css/register_selector.css' %}">
+  <link rel="icon" href="{% static 'login/imgs/motusicon64x64.webp' %}">
+</head>
+<body>
+
+  <!-- NAV -->
+  <header>
+    <a href="/"><img src="{% static 'login/imgs/Motuscar_logo.webp' %}" alt="Motuscar" class="logo"></a>
+    <nav>
+      <a class="nav-link" href="{% url 'login:login' %}">Iniciar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main>
+    <div class="selector-wrap">
+      <h1 class="title">Selecciona tu tipo de cuenta</h1>
+
+      <div class="cards">
+
+        <!-- CLIENTE -->
+        <a class="card" href="{% url 'login:register_cliente' %}">
+          <div class="card-header">
+            <div class="icon-box">
+              <img src="{% static 'login/imgs/cliente_icon.svg' %}" alt="Cliente">
+            </div>
+            <div>
+              <h3>Cliente</h3>
+              <p>Compra repuestos y agenda servicios fácilmente.</p>
+            </div>
+          </div>
+        </a>
+
+        <!-- MECÁNICO -->
+        <a class="card" href="{% url 'login:register_mecanico' %}">
+          <div class="card-header">
+            <div class="icon-box">
+              <img src="{% static 'login/imgs/icon_mecanico.png' %}" alt="Mecánico">
+            </div>
+            <div>
+              <h3>Mecánico</h3>
+              <p>Ofrece tus servicios y gestiona tus clientes.</p>
+            </div>
+          </div>
+        </a>
+
+        <!-- PROVEEDOR -->
+        <a class="card" href="{% url 'login:register_proveedor' %}">
+          <div class="card-header">
+            <div class="icon-box">
+              <img src="{% static 'login/imgs/icon_proveedor.svg' %}" alt="Proveedor">
+            </div>
+            <div>
+              <h3>Proveedor</h3>
+              <p>Publica tu catálogo y vende repuestos.</p>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2025 Motuscar — Todos los derechos reservados
+  </footer>
+</body>
+</html>
